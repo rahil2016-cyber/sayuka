@@ -1,0 +1,6 @@
+# Local environment and deployment scripts
+update_razorpay.sh
+dummy.txt
+.vscode/
+*.pem
+.env
