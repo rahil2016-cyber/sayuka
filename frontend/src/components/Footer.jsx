@@ -54,7 +54,11 @@ const Footer = () => {
             {/* Brand Column */}
             <div className="footer-brand">
               <div className="footer-logo">
-                <img src="/logo.svg" alt="Sayuka Jewellery" className="footer-logo-img" />
+                <img 
+                  src="/images/sayuka-logo.png" 
+                  alt="Sayuka Jewellery" 
+                  className="sayuka-logo sayuka-logo-footer" 
+                />
               </div>
               <p className="footer-tagline">
                 Timeless designs. Trusted quality.<br />Made to celebrate every you.

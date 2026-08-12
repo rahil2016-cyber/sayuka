@@ -99,7 +99,11 @@ const Header = () => {
             </button>
 
             <Link to="/" className="logo-brand-link" id="header-logo">
-              <img src="/logo.svg" alt="Sayuka Jewellery" className="header-logo-img" />
+              <img 
+                src="/images/sayuka-logo.png" 
+                alt="Sayuka Jewellery" 
+                className="sayuka-logo" 
+              />
             </Link>
           </div>
 
@@ -261,7 +265,11 @@ const Header = () => {
       <aside className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-drawer-header">
           <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-            <img src="/logo.svg" alt="Sayuka Jewellery" className="mobile-logo-img" />
+            <img 
+              src="/images/sayuka-logo.png" 
+              alt="Sayuka Jewellery" 
+              className="sayuka-logo sayuka-logo-mobile" 
+            />
           </Link>
           <button className="close-btn" onClick={() => setMobileMenuOpen(false)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
