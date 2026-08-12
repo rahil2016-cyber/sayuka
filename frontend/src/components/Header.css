@@ -105,10 +105,11 @@
 }
 
 .sayuka-logo {
-  width: 180px;
-  max-width: 100%;
-  height: auto;
+  height: 64px;
+  width: auto;
+  max-width: 220px;
   object-fit: contain;
+  border-radius: var(--radius-sm);
   display: block;
   transition: transform 0.2s ease;
 }
@@ -118,8 +119,8 @@
 }
 
 .sayuka-logo-mobile {
-  width: 150px;
-  height: auto;
+  height: 52px;
+  width: auto;
 }
 
 /* Nav Center (Desktop Links) */
