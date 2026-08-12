@@ -1,0 +1,208 @@
+/* ============================================
+   ABOUT PAGE
+   ============================================ */
+.about-header {
+  background: linear-gradient(135deg, var(--color-deep-purple) 0%, var(--color-purple) 100%);
+}
+
+.about-header .page-header-title {
+  color: var(--color-white);
+  font-size: var(--font-size-5xl);
+}
+
+.about-header .page-header-label {
+  color: rgba(255,255,255,0.75);
+}
+
+/* Story */
+.about-story {
+  padding: var(--spacing-24) 0;
+  background: var(--color-cream);
+}
+
+.about-story-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-16);
+  align-items: center;
+}
+
+.about-image-wrap {
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  aspect-ratio: 4/5;
+}
+
+.about-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.about-image-wrap:hover .about-main-image {
+  transform: scale(1.04);
+}
+
+.about-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-4xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin: var(--spacing-4) 0 var(--spacing-6);
+}
+
+.about-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.9;
+  margin-bottom: var(--spacing-4);
+}
+
+/* Stats */
+.about-stats {
+  background: var(--color-deep-purple);
+  padding: var(--spacing-16) 0;
+}
+
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-8);
+  text-align: center;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-6);
+  border: 1px solid rgba(200, 159, 93, 0.2);
+  border-radius: var(--radius-xl);
+}
+
+.about-stat-number {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.about-stat-label {
+  font-size: var(--font-size-sm);
+  color: rgba(248, 245, 240, 0.7);
+  letter-spacing: 0.05em;
+}
+
+/* Promise */
+.our-promise {
+  padding: var(--spacing-24) 0;
+  background: var(--color-white);
+}
+
+.promise-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-8);
+}
+
+.promise-card {
+  padding: var(--spacing-8);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-normal);
+}
+
+.promise-card:hover {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.promise-icon {
+  font-size: 1.5rem;
+  color: var(--color-gold);
+  margin-bottom: var(--spacing-4);
+}
+
+.promise-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.promise-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* CTA */
+.about-cta {
+  background: linear-gradient(135deg, var(--color-deep-purple) 0%, var(--color-purple) 100%);
+  padding: var(--spacing-20) 0;
+}
+
+.about-cta-inner {
+  text-align: center;
+}
+
+.about-cta-inner .section-label {
+  color: var(--color-gold-light);
+}
+
+.about-cta-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-4xl);
+  font-weight: 600;
+  color: var(--color-white);
+  margin: var(--spacing-3) 0 var(--spacing-4);
+}
+
+.about-cta-desc {
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: var(--spacing-8);
+}
+
+.about-cta-actions {
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .about-story-inner {
+    gap: var(--spacing-10);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-story-inner {
+    grid-template-columns: 1fr;
+  }
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .promise-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-title {
+    font-size: var(--font-size-3xl);
+  }
+  .about-cta-title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
