@@ -1,0 +1,17 @@
+{
+  "name": "sayuka-jewellery",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.2.0"
+  }
+}
