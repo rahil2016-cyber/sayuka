@@ -105,9 +105,9 @@
 }
 
 .sayuka-logo {
-  height: 64px;
+  height: 66px;
   width: auto;
-  max-width: 220px;
+  max-width: 280px;
   object-fit: contain;
   border-radius: var(--radius-sm);
   display: block;
@@ -119,7 +119,7 @@
 }
 
 .sayuka-logo-mobile {
-  height: 52px;
+  height: 56px;
   width: auto;
 }
 
