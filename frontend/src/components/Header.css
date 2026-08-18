@@ -112,6 +112,9 @@
   border-radius: var(--radius-sm);
   display: block;
   transition: transform 0.2s ease;
+  /* Blend mode to make the dark box background transparent */
+  mix-blend-mode: lighten;
+  filter: contrast(1.1) brightness(1.05);
 }
 
 .sayuka-logo:hover {
@@ -121,6 +124,8 @@
 .sayuka-logo-mobile {
   height: 56px;
   width: auto;
+  mix-blend-mode: lighten;
+  filter: contrast(1.1) brightness(1.05);
 }
 
 /* Nav Center (Desktop Links) */
@@ -390,41 +395,53 @@
   color: var(--color-gold);
 }
 
-/* Hamburger */
+/* Hamburger — 3 explicit spans */
 .hamburger {
   display: none;
-  width: 28px;
-  height: 20px;
-  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
 }
 
-.bar, .bar::before, .bar::after {
-  content: '';
-  position: absolute;
-  width: 100%;
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bar {
+  display: block;
+  width: 22px;
   height: 2px;
   background: var(--color-white);
-  transition: all var(--transition-fast);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
 }
 
-.bar { top: 9px; }
-.bar::before { top: -8px; }
-.bar::after { top: 8px; }
+/* Open state — top bar rotates to \ */
+.hamburger.open .bar-top {
+  transform: translateY(7px) rotate(45deg);
+}
 
-.bar.open {
-  background: transparent;
+/* Open state — middle bar fades out */
+.hamburger.open .bar-mid {
+  opacity: 0;
+  transform: scaleX(0);
 }
-.bar.open::before {
-  top: 0;
-  transform: rotate(45deg);
+
+/* Open state — bottom bar rotates to / */
+.hamburger.open .bar-bot {
+  transform: translateY(-7px) rotate(-45deg);
 }
-.bar.open::after {
-  top: 0;
-  transform: rotate(-45deg);
-}
+
 
 /* Mobile Drawer Overlay & Drawer */
 .mobile-drawer-overlay {
@@ -610,7 +627,137 @@
 @media (max-width: 960px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: flex !important; }
-  .hamburger { display: block; }
+  .hamburger { display: flex; }
   .topbar-ticker { font-size: 0.7rem; }
   .topbar-links { display: none; }
 }
+
+/* ============================================
+   INSTANT SEARCH DROPDOWN STYLES
+   ============================================ */
+.header-search-form-wrapper {
+  position: relative;
+}
+
+.instant-search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(97, 58, 104, 0.15);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
+  overflow: hidden;
+  z-index: 9999;
+  min-width: 320px;
+  animation: fadeInDown 0.2s ease both;
+}
+
+.search-dropdown-header {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  font-weight: 700;
+  padding: 10px 16px;
+  background: #f7f5f9;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.search-dropdown-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.search-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.search-dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.search-dropdown-link:hover {
+  background-color: #fcfbfe;
+}
+
+.search-suggest-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.search-suggest-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.search-suggest-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-deep-purple);
+  line-height: 1.3;
+}
+
+.search-suggest-price {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-gold-dark);
+  margin-top: 2px;
+}
+
+.search-dropdown-footer {
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-view-all {
+  background: none;
+  border: none;
+  color: var(--color-purple);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: color 0.2s ease;
+}
+
+.search-view-all:hover {
+  color: var(--color-gold-dark);
+  text-decoration: underline;
+}
+
+/* Mobile search tweaks */
+.mobile-search-container {
+  position: relative;
+}
+
+.mobile-search-container .instant-search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  right: 16px;
+  width: auto;
+  min-width: 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+

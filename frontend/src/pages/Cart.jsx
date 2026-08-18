@@ -104,9 +104,9 @@ const Cart = () => {
               <span>Total</span>
               <span>{formatPrice(grandTotal)}</span>
             </div>
-            <button className="btn btn-primary btn-lg checkout-btn" id="checkout-btn">
+            <Link to="/checkout" className="btn btn-primary btn-lg checkout-btn text-center" id="checkout-btn" style={{ display: 'block', textDecoration: 'none' }}>
               Proceed to Checkout
-            </button>
+            </Link>
             <div className="payment-methods">
               <span>Secure Payment via</span>
               <div className="payment-icons">

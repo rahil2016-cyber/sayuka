@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
-  const [wishlist, setWishlist] = useState(false);
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [addedToCart, setAddedToCart] = useState(false);
 
   const handleAddToCart = (e) => {
@@ -19,8 +20,10 @@ const ProductCard = ({ product }) => {
   const handleWishlist = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setWishlist(!wishlist);
+    toggleWishlist(product);
   };
+
+  const isWishlisted = isInWishlist(product.id);
 
   const formatPrice = (price) =>
     `₹${Number(price).toLocaleString('en-IN')}`;
@@ -49,12 +52,12 @@ const ProductCard = ({ product }) => {
 
           {/* Top Right Wishlist Button */}
           <button
-            className={`product-card-wishlist ${wishlist ? 'active' : ''}`}
+            className={`product-card-wishlist ${isWishlisted ? 'active' : ''}`}
             onClick={handleWishlist}
             aria-label="Add to wishlist"
             id={`wishlist-${product.id}`}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill={wishlist ? "#E91E63" : "none"} stroke={wishlist ? "#E91E63" : "#3D3D3D"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill={isWishlisted ? "#E91E63" : "none"} stroke={isWishlisted ? "#E91E63" : "#3D3D3D"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
             </svg>
           </button>

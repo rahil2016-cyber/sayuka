@@ -73,6 +73,8 @@
   height: auto;
   object-fit: contain;
   margin-bottom: 12px;
+  mix-blend-mode: lighten;
+  filter: contrast(1.1) brightness(1.05);
 }
 
 .footer-logo-name {

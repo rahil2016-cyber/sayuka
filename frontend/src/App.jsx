@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,6 +12,8 @@ import About from './pages/About';
 import CustomJewellery from './pages/CustomJewellery';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
+import Checkout from './pages/Checkout';
 import Admin from './pages/Admin';
 import './index.css';
 
@@ -35,6 +38,8 @@ const AppLayout = () => {
           <Route path="/custom-jewellery" element={<CustomJewellery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
@@ -46,12 +51,14 @@ const AppLayout = () => {
 const App = () => {
   return (
     <Router>
-      <CartProvider>
-        <Routes>
-          <Route path="/admin/*" element={<Admin />} />
-          <Route path="/*" element={<AppLayout />} />
-        </Routes>
-      </CartProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <Routes>
+            <Route path="/admin/*" element={<Admin />} />
+            <Route path="/*" element={<AppLayout />} />
+          </Routes>
+        </CartProvider>
+      </WishlistProvider>
     </Router>
   );
 };

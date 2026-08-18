@@ -8,6 +8,7 @@ const Admin = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [shopCategories, setShopCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Modal States
@@ -15,6 +16,8 @@ const Admin = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [bannerModalOpen, setBannerModalOpen] = useState(false);
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
 
   // Form States
   const [productForm, setProductForm] = useState({
@@ -37,6 +40,12 @@ const Admin = () => {
     link: '/collections'
   });
 
+  const [categoryForm, setCategoryForm] = useState({
+    name: '',
+    slug: '',
+    image: ''
+  });
+
   useEffect(() => {
     loadAdminData();
   }, []);
@@ -44,14 +53,16 @@ const Admin = () => {
   const loadAdminData = async () => {
     setLoading(true);
     try {
-      const [prodRes, orderRes, bannerRes] = await Promise.all([
+      const [prodRes, orderRes, bannerRes, catRes] = await Promise.all([
         productsAPI.getAll(),
         adminAPI.getOrders().catch(() => ({ data: { data: [] } })),
-        adminAPI.getBanners().catch(() => ({ data: { data: [] } }))
+        adminAPI.getBanners().catch(() => ({ data: { data: [] } })),
+        adminAPI.getCategories().catch(() => ({ data: { data: [] } }))
       ]);
       setProducts(prodRes.data.data || []);
       setOrders(orderRes.data.data || []);
       setBanners(bannerRes.data.data || []);
+      setShopCategories(catRes.data.data || []);
     } catch (err) {
       console.error("Error loading admin data:", err);
     } finally {
@@ -157,14 +168,55 @@ const Admin = () => {
     }
   };
 
+  // Category Actions
+  const handleOpenCategoryModal = (cat = null) => {
+    if (cat) {
+      setEditingCategory(cat);
+      setCategoryForm({ name: cat.name, slug: cat.slug, image: cat.image || '' });
+    } else {
+      setEditingCategory(null);
+      setCategoryForm({ name: '', slug: '', image: '' });
+    }
+    setCategoryModalOpen(true);
+  };
+
+  const handleSaveCategory = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingCategory) {
+        await adminAPI.updateCategory(editingCategory.id, categoryForm);
+      } else {
+        await adminAPI.createCategory(categoryForm);
+      }
+      setCategoryModalOpen(false);
+      setCategoryForm({ name: '', slug: '', image: '' });
+      setEditingCategory(null);
+      loadAdminData();
+    } catch (err) {
+      alert("Failed to save category: " + (err.response?.data?.message || err.message));
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    if (window.confirm("Delete this category from the home page?")) {
+      try {
+        await adminAPI.deleteCategory(id);
+        loadAdminData();
+      } catch (err) {
+        alert("Failed to delete category");
+      }
+    }
+  };
+
   const totalSales = orders.reduce((acc, o) => acc + (o.totalAmount || 0), 0);
+
 
   return (
     <div className="admin-container">
       {/* Sidebar Navigation */}
       <aside className="admin-sidebar">
         <div className="admin-brand">
-          <img src="/logo.svg" alt="Sayuka Admin" className="admin-logo-img" />
+          <img src="/images/sayuka-logo.png" alt="Sayuka Admin" className="admin-logo-img" style={{ maxHeight: '50px', width: 'auto' }} />
           <span className="admin-panel-tag">Admin Panel</span>
         </div>
 
@@ -449,35 +501,50 @@ const Admin = () => {
               <div className="admin-tab-content">
                 <header className="admin-header">
                   <div>
-                    <h1 className="admin-page-title">Categories</h1>
-                    <p className="admin-subtitle">Active category mapping &amp; sub-accessory groups</p>
+                    <h1 className="admin-page-title">Shop Categories</h1>
+                    <p className="admin-subtitle">Manage the "Shop by Category" section displayed on the Home page</p>
                   </div>
+                  <button className="btn btn-primary" onClick={() => handleOpenCategoryModal()}>
+                    + Add Category
+                  </button>
                 </header>
 
-                <div className="admin-card">
-                  <div className="category-tree-admin">
-                    {categoryStructure.map((cat, i) => (
-                      <div key={i} className="cat-tree-block">
-                        <h3>{cat.title}</h3>
-                        <ul className="cat-tree-list">
-                          {cat.items.map((item, j) => (
-                            <li key={j}>
-                              <span className="item-name">• {item.name}</span>
-                              {item.subcategories && (
-                                <div className="sub-tree-block">
-                                  {item.subcategories.map((sub, k) => (
-                                    <div key={k} className="sub-group-chip">
-                                      <strong>{sub.group}:</strong> {sub.items.map(s => s.name).join(', ')}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
+                {/* Category Cards Grid */}
+                <div className="category-admin-grid">
+                  {shopCategories.map(cat => (
+                    <div key={cat.id} className="category-admin-card">
+                      <div className="cat-admin-img-wrap">
+                        <img
+                          src={cat.image || 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&q=80'}
+                          alt={cat.name}
+                        />
                       </div>
-                    ))}
-                  </div>
+                      <div className="cat-admin-body">
+                        <h3 className="cat-admin-name">{cat.name}</h3>
+                        <p className="cat-admin-slug">/{cat.slug}</p>
+                        <div className="cat-admin-actions">
+                          <button
+                            className="table-action-btn edit"
+                            onClick={() => handleOpenCategoryModal(cat)}
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            className="table-action-btn delete"
+                            onClick={() => handleDeleteCategory(cat.id)}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  {shopCategories.length === 0 && (
+                    <div className="empty-state-msg">
+                      No categories yet. Click "+ Add Category" to create your first one.
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -633,16 +700,26 @@ const Admin = () => {
                     value={productForm.categories[0]}
                     onChange={e => setProductForm({ ...productForm, categories: [e.target.value] })}
                   >
-                    <option value="necklaces">Necklaces</option>
-                    <option value="earrings">Earrings</option>
-                    <option value="pendant-sets">Pendant Sets</option>
-                    <option value="bangles-bracelets">Bangles &amp; Bracelets</option>
-                    <option value="rings">Rings</option>
-                    <option value="maangtika">Maangtika</option>
-                    <option value="hathpans">Hathpans</option>
-                    <option value="gold-plated-necklace">Gold-Plated Necklaces</option>
-                    <option value="silver-earrings">Silver Earrings</option>
-                    <option value="anti-tarnish">Anti-Tarnish</option>
+                    {shopCategories.map((cat) => (
+                      <option key={cat.id || cat.slug} value={cat.slug}>
+                        {cat.name}
+                      </option>
+                    ))}
+                    {/* Fallback to default categories if database categories didn't load */}
+                    {shopCategories.length === 0 && (
+                      <>
+                        <option value="necklaces">Necklaces</option>
+                        <option value="earrings">Earrings</option>
+                        <option value="pendant-sets">Pendant Sets</option>
+                        <option value="bangles-bracelets">Bangles &amp; Bracelets</option>
+                        <option value="rings">Rings</option>
+                        <option value="maangtika">Maangtika</option>
+                        <option value="hathpans">Hathpans</option>
+                        <option value="gold-plated-necklace">Gold-Plated Necklaces</option>
+                        <option value="silver-earrings">Silver Earrings</option>
+                        <option value="anti-tarnish">Anti-Tarnish</option>
+                      </>
+                    )}
                   </select>
                 </div>
               </div>
@@ -758,6 +835,11 @@ const Admin = () => {
             <form onSubmit={handleCreateBanner} className="modal-form">
               <div className="form-group">
                 <label>Banner Image</label>
+                <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>
+                  💡 <strong>Recommended sizes for a perfect fit:</strong><br />
+                  • Desktop: <strong>1600 × 640 px</strong> or <strong>1920 × 768 px</strong> (Aspect ratio 5:2)<br />
+                  • Mobile: <strong>800 × 800 px</strong> (Square 1:1)
+                </div>
                 <div className="file-upload-box">
                   <input
                     type="file"
@@ -832,7 +914,105 @@ const Admin = () => {
           </div>
         </div>
       )}
+
+      {/* --- ADD / EDIT CATEGORY MODAL --- */}
+      {categoryModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-dialog">
+            <div className="modal-header">
+              <h2>{editingCategory ? 'Edit Category' : 'Add New Category'}</h2>
+              <button className="modal-close" onClick={() => setCategoryModalOpen(false)}>×</button>
+            </div>
+            <form onSubmit={handleSaveCategory} className="modal-form">
+
+              {/* Image Upload */}
+              <div className="form-group">
+                <label>Category Image</label>
+                <div className="file-upload-box">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="category-file-input"
+                    className="file-input-hidden"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setCategoryForm({ ...categoryForm, image: reader.result });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  <label htmlFor="category-file-input" className="file-upload-label">
+                    {categoryForm.image ? (
+                      <div className="uploaded-preview">
+                        <img src={categoryForm.image} alt="Preview" />
+                        <span>Change Image</span>
+                      </div>
+                    ) : (
+                      <div className="upload-placeholder">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                        </svg>
+                        <span>Upload Image from Device</span>
+                      </div>
+                    )}
+                  </label>
+                </div>
+                {/* OR paste image URL */}
+                <input
+                  type="url"
+                  placeholder="Or paste an image URL (https://...)"
+                  value={categoryForm.image && !categoryForm.image.startsWith('data:') ? categoryForm.image : ''}
+                  onChange={e => setCategoryForm({ ...categoryForm, image: e.target.value })}
+                  style={{ marginTop: '0.5rem' }}
+                />
+              </div>
+
+              {/* Category Name */}
+              <div className="form-group">
+                <label>Category Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Necklaces"
+                  value={categoryForm.name}
+                  onChange={e => {
+                    const name = e.target.value;
+                    const autoSlug = name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                    setCategoryForm({ ...categoryForm, name, slug: autoSlug });
+                  }}
+                  required
+                />
+              </div>
+
+              {/* Slug */}
+              <div className="form-group">
+                <label>Slug (URL key — auto-generated)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. necklaces"
+                  value={categoryForm.slug}
+                  onChange={e => setCategoryForm({ ...categoryForm, slug: e.target.value })}
+                />
+                <small style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>
+                  This links to: <code>/collections?category={categoryForm.slug || 'slug'}</code>
+                </small>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn btn-outline" onClick={() => setCategoryModalOpen(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary">
+                  {editingCategory ? 'Update Category' : 'Add Category'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 };
 

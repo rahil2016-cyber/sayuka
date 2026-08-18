@@ -149,3 +149,26 @@
   background: #E8F5E9;
   border-color: #4CAF50;
 }
+
+@media (max-width: 580px) {
+  .product-card-body {
+    padding: 8px 10px 10px 10px;
+  }
+  .product-card-title {
+    font-size: 0.8rem;
+  }
+  .product-card-price {
+    font-size: 0.9rem;
+  }
+  .product-card-bag-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .product-card-wishlist {
+    width: 28px;
+    height: 28px;
+    top: 6px;
+    right: 6px;
+  }
+}
+

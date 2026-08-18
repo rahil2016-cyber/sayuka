@@ -25,38 +25,45 @@ const defaultHeroSlides = [
   },
 ];
 
-const mainCategoryCards = [
+const defaultCategoryCards = [
   {
+    id: 1,
     name: 'Necklaces',
     slug: 'necklaces',
     image: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80'
   },
   {
+    id: 2,
     name: 'Earrings',
     slug: 'earrings',
     image: 'https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=600&q=80'
   },
   {
+    id: 3,
     name: 'Pendant Sets',
     slug: 'pendant-sets',
     image: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&q=80'
   },
   {
+    id: 4,
     name: 'Bangles & Bracelets',
     slug: 'bangles-bracelets',
     image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&q=80'
   },
   {
+    id: 5,
     name: 'Rings',
     slug: 'rings',
     image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80'
   },
   {
+    id: 6,
     name: 'Maangtika',
     slug: 'maangtika',
     image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80'
   },
   {
+    id: 7,
     name: 'Gold Plated',
     slug: 'gold-plated-necklace',
     image: 'https://images.unsplash.com/photo-1610694955371-d4a3e0ce4b52?w=600&q=80'
@@ -112,6 +119,8 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [heroSlides, setHeroSlides] = useState(defaultHeroSlides);
   const [bestsellers, setBestsellers] = useState(fallbackBestsellers);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [categoryCards, setCategoryCards] = useState(defaultCategoryCards);
   const [activeTab, setActiveTab] = useState('All');
   const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
@@ -124,6 +133,13 @@ const Home = () => {
         setHeroSlides(res.data.data);
       }
     }).catch(() => {});
+
+    // Fetch shop categories from backend
+    adminAPI.getCategories().then(res => {
+      if (res.data.data && res.data.data.length > 0) {
+        setCategoryCards(res.data.data);
+      }
+    }).catch(() => {}); // Falls back to defaultCategoryCards
   }, []);
 
   useEffect(() => {
@@ -135,19 +151,29 @@ const Home = () => {
   }, [heroSlides]);
 
   useEffect(() => {
-    const fetchBestsellers = async () => {
+    const fetchHomeProducts = async () => {
       try {
-        const res = await productsAPI.getBestsellers();
-        if (res.data.data && res.data.data.length > 0) {
-          setBestsellers(res.data.data);
+        setLoading(true);
+        // Fetch bestsellers
+        const bestRes = await productsAPI.getBestsellers();
+        if (bestRes.data.data && bestRes.data.data.length > 0) {
+          setBestsellers(bestRes.data.data);
+        }
+
+        // Fetch all products to determine New Arrivals (sorted by ID newest first)
+        const allRes = await productsAPI.getAll();
+        if (allRes.data.data && allRes.data.data.length > 0) {
+          // Sort products by ID descending and take first 4
+          const sorted = [...allRes.data.data].sort((a, b) => b.id - a.id);
+          setNewArrivals(sorted.slice(0, 4));
         }
       } catch (err) {
-        console.error('Error fetching bestsellers:', err);
+        console.error('Error fetching home products:', err);
       } finally {
         setLoading(false);
       }
     };
-    fetchBestsellers();
+    fetchHomeProducts();
   }, []);
 
   const handlePrevSlide = () => {
@@ -250,9 +276,9 @@ const Home = () => {
             </button>
 
             <div className="category-slider-track" ref={sliderRef}>
-              {mainCategoryCards.map((cat, idx) => (
+              {categoryCards.map((cat) => (
                 <div
-                  key={idx}
+                  key={cat.id || cat.slug}
                   className="category-card-item"
                   onClick={() => navigate(`/collections?category=${cat.slug}`)}
                 >
@@ -283,6 +309,38 @@ const Home = () => {
 
         </div>
       </section>
+
+      {/* SECTION 1.5: New Arrivals */}
+      {newArrivals.length > 0 && (
+        <section className="luxury-new-arrivals-section" style={{ padding: '4rem 0', backgroundColor: '#fff', borderBottom: '1px solid rgba(230, 168, 80, 0.1)' }}>
+          <div className="container relative-container">
+            {/* Section Header */}
+            <div className="luxury-header text-center">
+              <p className="luxury-subtitle" style={{ fontSize: '0.75rem', letterSpacing: '0.2em', color: 'var(--color-gold)', fontWeight: '700', marginBottom: '0.5rem' }}>JUST INTRODUCED</p>
+              <h2 className="luxury-title" style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', color: 'var(--color-deep-purple)', fontWeight: '400' }}>New Arrivals</h2>
+              <div className="luxury-divider" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginTop: '0.5rem', marginBottom: '2rem' }}>
+                <span className="divider-line" style={{ height: '1px', width: '50px', background: 'var(--color-gold)', opacity: '0.6' }}></span>
+                <span className="diamond-motif" style={{ color: 'var(--color-gold)', fontSize: '0.8rem' }}>✦</span>
+                <span className="divider-line" style={{ height: '1px', width: '50px', background: 'var(--color-gold)', opacity: '0.6' }}></span>
+              </div>
+            </div>
+
+            {/* Product Cards Grid */}
+            <div className="bestsellers-grid-container">
+              {newArrivals.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* View All Button */}
+            <div className="text-center view-all-wrap" style={{ marginTop: '2.5rem' }}>
+              <Link to="/collections?sort=newest" className="view-all-bestsellers-btn">
+                View All New Arrivals &rarr;
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* SECTION 2: Our Bestsellers */}
       <section className="luxury-bestseller-section">

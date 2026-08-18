@@ -226,8 +226,8 @@
 
 @media (max-width: 960px) {
   .collections-header {
-    margin-top: 110px;
-    padding: 40px 0 24px 0;
+    margin-top: 0;
+    padding: 30px 0 20px 0;
   }
   .collections-layout {
     grid-template-columns: 1fr;
@@ -264,6 +264,11 @@
 
 @media (max-width: 580px) {
   .products-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px; /* Tighter gap for mobile cards */
+  }
+  .collections-header {
+    margin-top: 0;
+    padding: 24px 0 16px 0;
   }
 }

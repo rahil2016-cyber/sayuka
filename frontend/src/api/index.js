@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// In production, frontend is served by Express so we use relative /api path.
+// In development, VITE_API_URL from .env is used (e.g. http://localhost:5000/api).
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -18,10 +20,15 @@ export const productsAPI = {
 
 export const adminAPI = {
   getOrders: () => api.get('/admin/orders'),
+  createOrder: (data) => api.post('/admin/orders', data),
   updateOrderStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }),
   getBanners: () => api.get('/admin/banners'),
   createBanner: (data) => api.post('/admin/banners', data),
   deleteBanner: (id) => api.delete(`/admin/banners/${id}`),
+  getCategories: () => api.get('/admin/categories'),
+  createCategory: (data) => api.post('/admin/categories', data),
+  updateCategory: (id, data) => api.put(`/admin/categories/${id}`, data),
+  deleteCategory: (id) => api.delete(`/admin/categories/${id}`),
 };
 
 export const contactAPI = {

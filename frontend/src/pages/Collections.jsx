@@ -75,7 +75,7 @@ const Collections = () => {
       {/* Header Banner */}
       <div className="page-header collections-header">
         <div className="container">
-          <p className="page-header-label">Shopify Experience • Sayuka Jewellery</p>
+          <p className="page-header-label">Sayuka Jewellery</p>
           <h1 className="page-header-title">
             {searchQuery ? `Search Results for "${searchQuery}"` : 'All Collections & Categories'}
           </h1>

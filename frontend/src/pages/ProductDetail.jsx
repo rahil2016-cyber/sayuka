@@ -2,32 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { productsAPI } from '../api';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await productsAPI.getById(id);
         setProduct(res.data.data);
-      } catch {
-        navigate('/collections');
+      } catch (err) {
+        setError('Product not found or server is unavailable. Please try again.');
       } finally {
         setLoading(false);
       }
     };
     fetchProduct();
     window.scrollTo(0, 0);
-  }, [id, navigate]);
+  }, [id]);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
@@ -46,7 +51,26 @@ const ProductDetail = () => {
     return <div className="page-content loading-container"><div className="spinner" /></div>;
   }
 
-  if (!product) return null;
+  if (error || !product) {
+    return (
+      <div className="page-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center', gap: '1.5rem' }}>
+        <div style={{ fontSize: '4rem' }}>💎</div>
+        <h2 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-deep-purple)' }}>Product Not Found</h2>
+        <p style={{ color: 'var(--color-text-muted)' }}>{error || 'This product does not exist.'}</p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button onClick={() => navigate(-1)} className="btn btn-outline">← Go Back</button>
+          <Link to="/collections" className="btn btn-primary">Browse Collections</Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Guard: ensure images is always an array
+  const images = Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : product.image
+      ? [product.image]
+      : ['https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80'];
 
   return (
     <div className="product-detail-page page-content">
@@ -69,7 +93,7 @@ const ProductDetail = () => {
           {/* Left: Images */}
           <div className="product-images">
             <div className="product-thumbnails">
-              {product.images.map((img, i) => (
+              {images.map((img, i) => (
                 <button
                   key={i}
                   className={`thumbnail-btn ${activeImage === i ? 'active' : ''}`}
@@ -82,7 +106,7 @@ const ProductDetail = () => {
             </div>
             <div className="product-main-image-wrap">
               <img
-                src={product.images[activeImage]}
+                src={images[activeImage]}
                 alt={product.name}
                 className="product-main-image"
               />
@@ -145,12 +169,13 @@ const ProductDetail = () => {
             </div>
 
             {/* Actions */}
-            <div className="product-actions">
+            <div className="product-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               <button
                 className={`btn btn-primary btn-lg add-to-cart-btn ${added ? 'added' : ''}`}
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
                 id="add-to-cart-detail"
+                style={{ flex: 1 }}
               >
                 {!product.inStock ? 'Out of Stock' : added ? '✓ Added to Cart!' : 'Add to Cart'}
               </button>
@@ -159,10 +184,32 @@ const ProductDetail = () => {
                   className="btn btn-outline btn-lg"
                   onClick={handleBuyNow}
                   id="buy-now-btn"
+                  style={{ flex: 1 }}
                 >
                   Buy Now
                 </button>
               )}
+              <button
+                className={`wishlist-btn-detail ${isInWishlist(product.id) ? 'active' : ''}`}
+                onClick={() => toggleWishlist(product)}
+                title="Add to Wishlist"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  border: '1px solid rgba(97, 58, 104, 0.25)',
+                  background: isInWishlist(product.id) ? 'rgba(233, 30, 99, 0.1)' : '#fff',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill={isInWishlist(product.id) ? "#E91E63" : "none"} stroke={isInWishlist(product.id) ? "#E91E63" : "#3D3D3D"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+              </button>
             </div>
 
             {/* Trust badges */}
