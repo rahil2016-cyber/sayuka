@@ -160,12 +160,16 @@ const Home = () => {
           setBestsellers(bestRes.data.data);
         }
 
-        // Fetch all products to determine New Arrivals (sorted by ID newest first)
+        // Fetch all products to determine New Arrivals (prioritize isNewArrival flag)
         const allRes = await productsAPI.getAll();
         if (allRes.data.data && allRes.data.data.length > 0) {
-          // Sort products by ID descending and take first 4
-          const sorted = [...allRes.data.data].sort((a, b) => b.id - a.id);
-          setNewArrivals(sorted.slice(0, 4));
+          const flaggedNew = allRes.data.data.filter(p => p.isNewArrival);
+          if (flaggedNew.length > 0) {
+            setNewArrivals(flaggedNew.slice(0, 4));
+          } else {
+            const sorted = [...allRes.data.data].sort((a, b) => b.id - a.id);
+            setNewArrivals(sorted.slice(0, 4));
+          }
         }
       } catch (err) {
         console.error('Error fetching home products:', err);

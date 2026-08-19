@@ -87,11 +87,12 @@ async function migrate(shouldExit = false) {
         price DECIMAL(10, 2) NOT NULL,
         original_price DECIMAL(10, 2) NULL,
         description TEXT NULL,
-        images JSON NOT NULL,
+        images LONGTEXT NOT NULL,
         stock INT DEFAULT 10,
         in_stock TINYINT(1) DEFAULT 1,
         is_featured TINYINT(1) DEFAULT 0,
         is_bestseller TINYINT(1) DEFAULT 0,
+        is_new_arrival TINYINT(1) DEFAULT 0,
         rating DECIMAL(3, 2) DEFAULT 5.00,
         reviews INT DEFAULT 0,
         collection VARCHAR(100) NULL,
@@ -128,13 +129,21 @@ async function migrate(shouldExit = false) {
     `);
     console.log('✅ Banners table created/verified.');
 
-    // Alter existing tables if they were previously created with VARCHAR(255)
+    // Alter existing tables if they were previously created with older settings
     try {
       await connection.query('ALTER TABLE banners MODIFY COLUMN image LONGTEXT NOT NULL');
       await connection.query('ALTER TABLE categories MODIFY COLUMN image LONGTEXT NULL');
-      console.log('✅ Column types modified to LONGTEXT successfully.');
+      await connection.query('ALTER TABLE products MODIFY COLUMN images LONGTEXT NOT NULL');
+      
+      // Add is_new_arrival column to products if it does not exist
+      const [columns] = await connection.query("SHOW COLUMNS FROM products LIKE 'is_new_arrival'");
+      if (columns.length === 0) {
+        await connection.query('ALTER TABLE products ADD COLUMN is_new_arrival TINYINT(1) DEFAULT 0 AFTER is_bestseller');
+        console.log('✅ Added is_new_arrival column to products.');
+      }
+      console.log('✅ Column types modified and synchronized successfully.');
     } catch (alterErr) {
-      console.warn('⚠️ Column alteration warning (might already be LONGTEXT):', alterErr.message);
+      console.warn('⚠️ Column alteration warning:', alterErr.message);
     }
 
     await connection.query(`

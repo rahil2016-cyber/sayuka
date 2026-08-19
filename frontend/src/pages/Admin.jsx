@@ -128,6 +128,7 @@ const Admin = () => {
         stock: product.stock || 10,
         isFeatured: !!product.isFeatured,
         isBestseller: !!product.isBestseller,
+        isNewArrival: !!product.isNewArrival,
         image: product.images ? product.images[0] : ''
       });
     } else {
@@ -142,6 +143,7 @@ const Admin = () => {
         stock: 10,
         isFeatured: false,
         isBestseller: false,
+        isNewArrival: false,
         image: ''
       });
     }
@@ -871,6 +873,14 @@ const Admin = () => {
                     onChange={e => setProductForm({ ...productForm, isFeatured: e.target.checked })}
                   />
                   Mark as Featured
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={productForm.isNewArrival}
+                    onChange={e => setProductForm({ ...productForm, isNewArrival: e.target.checked })}
+                  />
+                  Mark as New Arrival
                 </label>
               </div>
 

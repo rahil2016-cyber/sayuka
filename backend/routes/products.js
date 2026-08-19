@@ -72,6 +72,7 @@ router.get('/', async (req, res) => {
         inStock: !!r.in_stock,
         isFeatured: !!r.is_featured,
         isBestseller: !!r.is_bestseller,
+        isNewArrival: !!r.is_new_arrival,
         rating: parseFloat(r.rating),
         images: typeof r.images === 'string' ? JSON.parse(r.images) : r.images,
         categories: r.categories_list ? r.categories_list.split(',') : []
@@ -155,15 +156,15 @@ router.get('/bestsellers', async (req, res) => {
 // Create product (Admin)
 router.post('/', verifyAdmin, async (req, res) => {
   try {
-    const { name, slug, description, price, originalPrice, categories, isFeatured, isBestseller, stock, image, collection, type, material, gemstone, weight, badge } = req.body;
+    const { name, slug, description, price, originalPrice, categories, isFeatured, isBestseller, isNewArrival, stock, image, collection, type, material, gemstone, weight, badge } = req.body;
     
     if (db.useDb()) {
       const productSlug = slug || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       const imagesJson = JSON.stringify([image || 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80']);
 
       const [result] = await db.pool().query(`
-        INSERT INTO products (name, slug, price, original_price, description, images, stock, in_stock, is_featured, is_bestseller, rating, reviews, collection, type, material, gemstone, weight, badge)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 5.0, 1, ?, ?, ?, ?, ?, ?)
+        INSERT INTO products (name, slug, price, original_price, description, images, stock, in_stock, is_featured, is_bestseller, is_new_arrival, rating, reviews, collection, type, material, gemstone, weight, badge)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 5.0, 1, ?, ?, ?, ?, ?, ?)
       `, [
         name,
         productSlug,
@@ -175,6 +176,7 @@ router.post('/', verifyAdmin, async (req, res) => {
         (stock !== undefined ? parseInt(stock) > 0 : true) ? 1 : 0,
         isFeatured ? 1 : 0,
         isBestseller ? 1 : 0,
+        isNewArrival ? 1 : 0,
         collection || null,
         type || null,
         material || null,
@@ -200,7 +202,10 @@ router.post('/', verifyAdmin, async (req, res) => {
         price: parseFloat(newProdRows[0].price),
         originalPrice: parseFloat(newProdRows[0].original_price),
         images: JSON.parse(newProdRows[0].images),
-        categories: linkCats
+        categories: linkCats,
+        isFeatured: !!newProdRows[0].is_featured,
+        isBestseller: !!newProdRows[0].is_bestseller,
+        isNewArrival: !!newProdRows[0].is_new_arrival
       };
 
       return res.status(201).json({ success: true, data: newProd });
@@ -221,6 +226,7 @@ router.post('/', verifyAdmin, async (req, res) => {
       stock: parseInt(stock) || 10,
       isFeatured: !!isFeatured,
       isBestseller: !!isBestseller,
+      isNewArrival: !!isNewArrival,
       rating: 5.0,
       reviews: 1
     };
@@ -248,7 +254,7 @@ router.put('/:id', verifyAdmin, async (req, res) => {
 
       const allowedFields = [
         'name', 'slug', 'price', 'originalPrice', 'description', 'images', 'stock', 
-        'inStock', 'isFeatured', 'isBestseller', 'collection', 'type', 'material', 
+        'inStock', 'isFeatured', 'isBestseller', 'isNewArrival', 'collection', 'type', 'material', 
         'gemstone', 'weight', 'badge'
       ];
 
@@ -266,6 +272,10 @@ router.put('/:id', verifyAdmin, async (req, res) => {
           }
           if (key === 'isBestseller') {
             dbKey = 'is_bestseller';
+            updates[key] = updates[key] ? 1 : 0;
+          }
+          if (key === 'isNewArrival') {
+            dbKey = 'is_new_arrival';
             updates[key] = updates[key] ? 1 : 0;
           }
           fields.push(`${dbKey} = ?`);
@@ -295,7 +305,10 @@ router.put('/:id', verifyAdmin, async (req, res) => {
         ...rows[0],
         price: parseFloat(rows[0].price),
         originalPrice: parseFloat(rows[0].original_price),
-        images: JSON.parse(rows[0].images)
+        images: JSON.parse(rows[0].images),
+        isFeatured: !!rows[0].is_featured,
+        isBestseller: !!rows[0].is_bestseller,
+        isNewArrival: !!rows[0].is_new_arrival
       };
       return res.json({ success: true, data: updatedProd });
     }
@@ -354,6 +367,7 @@ router.get('/:id', async (req, res) => {
         inStock: !!rows[0].in_stock,
         isFeatured: !!rows[0].is_featured,
         isBestseller: !!rows[0].is_bestseller,
+        isNewArrival: !!rows[0].is_new_arrival,
         rating: parseFloat(rows[0].rating),
         images: typeof rows[0].images === 'string' ? JSON.parse(rows[0].images) : rows[0].images,
         categories: rows[0].categories_list ? rows[0].categories_list.split(',') : []
