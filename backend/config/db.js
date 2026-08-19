@@ -46,8 +46,19 @@ const initDb = async () => {
   }
 };
 
+const getConnection = async () => {
+  if (!pool) {
+    await initDb();
+  }
+  if (!pool) {
+    throw new Error('Database pool could not be initialized.');
+  }
+  return await pool.getConnection();
+};
+
 module.exports = {
   initDb,
   pool: () => pool,
-  useDb: () => useDb
+  useDb: () => useDb,
+  getConnection
 };

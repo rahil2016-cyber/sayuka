@@ -68,9 +68,19 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'Internal server error' });
 });
 
-const { initDb } = require('./config/db');
+const { initDb, useDb } = require('./config/db');
+const migrate = require('./migrate');
 
-initDb().then(() => {
+initDb().then(async () => {
+  if (useDb()) {
+    try {
+      console.log('🔄 Running database migrations on startup...');
+      await migrate(false);
+    } catch (migrateErr) {
+      console.error('⚠️ Database migration failed during startup:', migrateErr);
+    }
+  }
+
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Sayuka Jewellery running on http://0.0.0.0:${PORT} [${NODE_ENV}]`);
   });

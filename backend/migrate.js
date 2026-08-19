@@ -62,7 +62,7 @@ const defaultCategories = [
   { name: 'Silver Accessories', slug: 'silver-accessories', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80' }
 ];
 
-async function migrate() {
+async function migrate(shouldExit = false) {
   console.log('🔄 Starting Database Schema Creation...');
 
   const connection = await db.getConnection();
@@ -203,11 +203,9 @@ async function migrate() {
     // 4. Seed Products (Idempotent)
     console.log('🌱 Seeding Products...');
     for (const prod of productsData) {
-      // Products might not have a slug in the mock js file. Fallback to name-based slug.
       const slug = prod.slug || prod.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       const imagesJson = JSON.stringify(prod.images || [prod.image]);
 
-      // Check if product exists
       const [prodRows] = await connection.query('SELECT id FROM products WHERE slug = ?', [slug]);
       let productId;
 
@@ -262,15 +260,11 @@ async function migrate() {
         ]);
       }
 
-      // Map product to categories
-      // The current products in JS might use a single 'category' string or 'categories' array.
       const categoriesToLink = prod.categories || (prod.category ? [prod.category] : ['necklaces']);
       for (const catSlug of categoriesToLink) {
-        // Find category ID
         const [catRows] = await connection.query('SELECT id FROM categories WHERE slug = ?', [catSlug]);
         if (catRows.length > 0) {
           const categoryId = catRows[0].id;
-          // Insert relationship
           await connection.query(`
             INSERT IGNORE INTO product_categories (product_id, category_id)
             VALUES (?, ?)
@@ -284,8 +278,14 @@ async function migrate() {
     console.error('❌ Migration failed:', err);
   } finally {
     connection.release();
-    process.exit();
+    if (shouldExit) {
+      process.exit();
+    }
   }
 }
 
-migrate();
+if (require.main === module) {
+  migrate(true);
+}
+
+module.exports = migrate;
