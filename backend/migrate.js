@@ -74,7 +74,7 @@ async function migrate(shouldExit = false) {
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         slug VARCHAR(255) UNIQUE NOT NULL,
-        image VARCHAR(255) NULL
+        image LONGTEXT NULL
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
     console.log('✅ Categories table created/verified.');
@@ -121,12 +121,21 @@ async function migrate(shouldExit = false) {
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         subtitle VARCHAR(255) NULL,
-        image VARCHAR(255) NOT NULL,
+        image LONGTEXT NOT NULL,
         link VARCHAR(255) DEFAULT '/collections',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
     console.log('✅ Banners table created/verified.');
+
+    // Alter existing tables if they were previously created with VARCHAR(255)
+    try {
+      await connection.query('ALTER TABLE banners MODIFY COLUMN image LONGTEXT NOT NULL');
+      await connection.query('ALTER TABLE categories MODIFY COLUMN image LONGTEXT NULL');
+      console.log('✅ Column types modified to LONGTEXT successfully.');
+    } catch (alterErr) {
+      console.warn('⚠️ Column alteration warning (might already be LONGTEXT):', alterErr.message);
+    }
 
     await connection.query(`
       CREATE TABLE IF NOT EXISTS orders (
