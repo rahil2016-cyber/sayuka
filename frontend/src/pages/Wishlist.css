@@ -170,3 +170,26 @@
 .add-to-cart-wish {
   width: 100%;
 }
+
+@media (max-width: 600px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .wishlist-item-info {
+    padding: 0.75rem 0.75rem 0.4rem !important;
+  }
+  .wishlist-item-actions {
+    padding: 0 0.75rem 0.75rem !important;
+  }
+  .wishlist-item-name {
+    font-size: 0.95rem !important;
+  }
+  .wishlist-item-price {
+    font-size: 0.85rem !important;
+  }
+  .add-to-cart-wish {
+    font-size: 0.75rem !important;
+    padding: 8px 12px !important;
+  }
+}

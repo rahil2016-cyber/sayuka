@@ -51,7 +51,7 @@
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+  grid-template-columns: 1.8fr 1fr 1fr;
   gap: var(--spacing-10);
 }
 
