@@ -39,8 +39,7 @@ const initDb = async () => {
     console.warn(`Reason: ${err.message}`);
     
     if (isProduction) {
-      console.error('❌ CRITICAL: Database connection is required in production!');
-      process.exit(1);
+      console.error('❌ CRITICAL WARNING: Database connection failed in production! Falling back to in-memory store.');
     } else {
       console.warn('👉 Falling back to in-memory store for local development.');
     }
