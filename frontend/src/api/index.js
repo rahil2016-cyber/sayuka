@@ -7,6 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 const api = axios.create({
   baseURL: API_URL,
   timeout: 10000,
+  withCredentials: true,
 });
 
 export const productsAPI = {
@@ -19,6 +20,9 @@ export const productsAPI = {
 };
 
 export const adminAPI = {
+  login: (credentials) => api.post('/admin/login', credentials),
+  logout: () => api.post('/admin/logout'),
+  verify: () => api.get('/admin/verify'),
   getOrders: () => api.get('/admin/orders'),
   createOrder: (data) => api.post('/admin/orders', data),
   updateOrderStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }),

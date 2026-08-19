@@ -4,6 +4,12 @@ import { categoryStructure } from '../data/categoriesData';
 import './Admin.css';
 
 const Admin = () => {
+  // Authentication States
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [loginFormInputs, setLoginFormInputs] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+
   const [activeTab, setActiveTab] = useState('dashboard');
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -47,17 +53,52 @@ const Admin = () => {
   });
 
   useEffect(() => {
-    loadAdminData();
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    try {
+      await adminAPI.verify();
+      setIsAuthenticated(true);
+      loadAdminData();
+    } catch (err) {
+      setIsAuthenticated(false);
+    } finally {
+      setAuthChecking(false);
+    }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+    try {
+      await adminAPI.login(loginFormInputs);
+      setIsAuthenticated(true);
+      loadAdminData();
+    } catch (err) {
+      setLoginError(err.response?.data?.message || 'Invalid username or password.');
+    }
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await adminAPI.logout();
+      setIsAuthenticated(false);
+      setLoginFormInputs({ username: '', password: '' });
+    } catch (err) {
+      alert("Logout failed");
+    }
+  };
 
   const loadAdminData = async () => {
     setLoading(true);
     try {
       const [prodRes, orderRes, bannerRes, catRes] = await Promise.all([
         productsAPI.getAll(),
-        adminAPI.getOrders().catch(() => ({ data: { data: [] } })),
-        adminAPI.getBanners().catch(() => ({ data: { data: [] } })),
-        adminAPI.getCategories().catch(() => ({ data: { data: [] } }))
+        adminAPI.getOrders(),
+        adminAPI.getBanners(),
+        adminAPI.getCategories()
       ]);
       setProducts(prodRes.data.data || []);
       setOrders(orderRes.data.data || []);
@@ -65,6 +106,9 @@ const Admin = () => {
       setShopCategories(catRes.data.data || []);
     } catch (err) {
       console.error("Error loading admin data:", err);
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        setIsAuthenticated(false);
+      }
     } finally {
       setLoading(false);
     }
@@ -210,6 +254,93 @@ const Admin = () => {
 
   const totalSales = orders.reduce((acc, o) => acc + (o.totalAmount || 0), 0);
 
+  if (authChecking) {
+    return <div className="admin-loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', fontSize: '1.2rem', color: 'var(--color-deep-purple)' }}>Checking security session...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="admin-login-overlay" style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        background: '#f7f5f9',
+        fontFamily: 'var(--font-body)'
+      }}>
+        <div className="admin-login-card" style={{
+          background: '#ffffff',
+          padding: '2.5rem',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: '0 8px 30px rgba(97, 58, 104, 0.08)',
+          width: '100%',
+          maxWidth: '420px',
+          border: '1px solid rgba(230, 168, 80, 0.15)'
+        }}>
+          <div className="login-brand" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <img src="/images/sayuka-logo.png" alt="Sayuka Admin" style={{ maxHeight: '60px', marginBottom: '1rem' }} />
+            <h2 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-deep-purple)', fontSize: '1.75rem', marginBottom: '0.25rem' }}>Sayuka Jewellery</h2>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>Admin Secure Sign In</p>
+          </div>
+          <form onSubmit={handleLoginSubmit} className="login-form" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {loginError && (
+              <div className="login-error-alert" style={{
+                background: '#fff2f2',
+                border: '1px solid #ffcdd2',
+                color: '#d32f2f',
+                padding: '0.75rem',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem'
+              }}>
+                ⚠️ {loginError}
+              </div>
+            )}
+            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--color-deep-purple)', textAlign: 'left' }}>Username</label>
+              <input
+                type="text"
+                value={loginFormInputs.username}
+                onChange={e => setLoginFormInputs({ ...loginFormInputs, username: e.target.value })}
+                placeholder="Enter admin username"
+                style={{
+                  padding: '0.75rem',
+                  border: '1px solid var(--color-gray-300)',
+                  borderRadius: 'var(--radius-md)',
+                  outline: 'none',
+                  fontSize: '0.95rem'
+                }}
+                required
+              />
+            </div>
+            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--color-deep-purple)', textAlign: 'left' }}>Password</label>
+              <input
+                type="password"
+                value={loginFormInputs.password}
+                onChange={e => setLoginFormInputs({ ...loginFormInputs, password: e.target.value })}
+                placeholder="Enter password"
+                style={{
+                  padding: '0.75rem',
+                  border: '1px solid var(--color-gray-300)',
+                  borderRadius: 'var(--radius-md)',
+                  outline: 'none',
+                  fontSize: '0.95rem'
+                }}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary login-btn" style={{
+              padding: '0.85rem',
+              fontSize: '1rem',
+              fontWeight: '600',
+              marginTop: '0.5rem',
+              cursor: 'pointer'
+            }}>Sign In</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-container">
@@ -261,10 +392,10 @@ const Admin = () => {
             <span>Banners</span>
           </button>
 
-          <a href="/" className="admin-nav-item logout">
+          <button onClick={handleLogout} className="admin-nav-item logout" style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-            <span>Exit Admin</span>
-          </a>
+            <span>Logout</span>
+          </button>
         </nav>
       </aside>
 

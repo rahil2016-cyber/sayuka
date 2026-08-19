@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 
 // Load .env from backend dir OR project root
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -12,19 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
-// Critical environment variable verification for production safety
-if (NODE_ENV === 'production') {
-  const requiredEnvVars = ['ADMIN_USERNAME', 'ADMIN_PASSWORD_HASH', 'JWT_SECRET'];
-  const missing = requiredEnvVars.filter(v => !process.env[v]);
-  if (missing.length > 0) {
-    console.error(`❌ CRITICAL SECURITY ERROR: Missing required production environment variables: ${missing.join(', ')}`);
-    process.exit(1);
-  }
-}
-
-
 // Middleware
-app.use(cookieParser());
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true,
@@ -66,10 +53,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'Internal server error' });
 });
 
-const { initDb } = require('./config/db');
-
-initDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 Sayuka Jewellery running on http://localhost:${PORT} [${NODE_ENV}]`);
-  });
+app.listen(PORT, () => {
+  console.log(`🚀 Sayuka Jewellery running on http://localhost:${PORT} [${NODE_ENV}]`);
 });
