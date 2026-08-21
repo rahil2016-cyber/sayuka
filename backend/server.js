@@ -19,7 +19,7 @@ if (NODE_ENV === 'production') {
   if (missing.length > 0) {
     console.warn(`⚠️ WARNING: Missing required production environment variables: ${missing.join(', ')}. Using default values to prevent server crash.`);
     if (!process.env.ADMIN_USERNAME) process.env.ADMIN_USERNAME = 'admin';
-    if (!process.env.ADMIN_PASSWORD_HASH) process.env.ADMIN_PASSWORD_HASH = '$2b$10$d.4fPJsEQQ6HxfMOIWine.wChBuubkTh5IbVKI3aefYPCIx0dZHRS';
+    if (!process.env.ADMIN_PASSWORD_HASH) process.env.ADMIN_PASSWORD_HASH = '$2b$10$GWPTorE8hWLpUSt4Wn6bHOvWAtIThNmCsWt1.lIV2Vo/qLQ77R7/.';
     if (!process.env.JWT_SECRET) process.env.JWT_SECRET = 'fallback_secret_for_production';
   }
 }
