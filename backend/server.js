@@ -19,7 +19,13 @@ if (NODE_ENV === 'production') {
   if (missing.length > 0) {
     console.warn(`⚠️ WARNING: Missing required production environment variables: ${missing.join(', ')}. Using default values to prevent server crash.`);
     if (!process.env.ADMIN_USERNAME) process.env.ADMIN_USERNAME = 'admin';
-    if (!process.env.ADMIN_PASSWORD_HASH) process.env.ADMIN_PASSWORD_HASH = '$2b$10$WAOGtcio4K/GOV58u/QrNuWFMWbae2dw1ERt9Q11andYJKgTe9oja';
+    
+    // If the hash is missing or it's a plain text password instead of a bcrypt hash, override it
+    if (!process.env.ADMIN_PASSWORD_HASH || !process.env.ADMIN_PASSWORD_HASH.startsWith('$2')) {
+      console.warn('⚠️ Invalid ADMIN_PASSWORD_HASH (appears to be plain text). Overriding with secure default hash.');
+      process.env.ADMIN_PASSWORD_HASH = '$2b$10$WAOGtcio4K/GOV58u/QrNuWFMWbae2dw1ERt9Q11andYJKgTe9oja';
+    }
+    
     if (!process.env.JWT_SECRET) process.env.JWT_SECRET = 'fallback_secret_for_production';
   }
 }
