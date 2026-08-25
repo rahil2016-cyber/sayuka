@@ -7,7 +7,7 @@ const Cart = () => {
   const { items, totalItems, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
 
   const formatPrice = (price) => `₹ ${price.toLocaleString('en-IN')}`;
-  const shipping = totalPrice > 0 && totalPrice < 1999 ? 99 : 0;
+  const shipping = totalPrice > 0 && totalPrice < 4999 ? 200 : 0;
   const grandTotal = totalPrice + shipping;
 
   if (items.length === 0) {
@@ -96,7 +96,7 @@ const Cart = () => {
               </div>
               {shipping > 0 && (
                 <div className="shipping-note">
-                  Add {formatPrice(1999 - totalPrice)} more for free shipping
+                  Add {formatPrice(4999 - totalPrice)} more for free shipping
                 </div>
               )}
             </div>

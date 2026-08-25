@@ -25,7 +25,7 @@ const Checkout = () => {
 
   const formatPrice = (price) => `₹ ${price.toLocaleString('en-IN')}`;
 
-  const deliveryCharge = deliveryOption === 'home' ? 120 : 0;
+  const deliveryCharge = deliveryOption === 'home' ? (totalPrice > 0 && totalPrice < 4999 ? 200 : 0) : 0;
   const grandTotal = totalPrice + deliveryCharge;
 
   const handleChange = (e) => {
@@ -169,7 +169,7 @@ const Checkout = () => {
                   <div className="radio-circle"></div>
                   <div className="delivery-btn-text">
                     <strong>Home Delivery</strong>
-                    <span>+₹120 delivery charge</span>
+                    <span>{totalPrice > 0 && totalPrice < 4999 ? '+₹200 delivery charge' : 'Free delivery'}</span>
                   </div>
                 </button>
                 <button
