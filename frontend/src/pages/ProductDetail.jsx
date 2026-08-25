@@ -150,72 +150,56 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Quantity */}
-            <div className="quantity-section" style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-              <div>
-                <label className="quantity-label">Quantity</label>
-                <div className="quantity-control" style={{ marginBottom: 0 }}>
-                  <button
-                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                    className="qty-btn"
-                    id="qty-decrease"
-                  >−</button>
-                  <span className="qty-value">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(q => q + 1)}
-                    className="qty-btn"
-                    id="qty-increase"
-                  >+</button>
+            {/* Product Actions Area */}
+            <div className="product-actions-wrapper">
+              <div className="quantity-wishlist-row">
+                <div className="quantity-wrapper">
+                  <label className="quantity-label">Quantity</label>
+                  <div className="quantity-control">
+                    <button
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      className="qty-btn"
+                      id="qty-decrease"
+                    >−</button>
+                    <span className="qty-value">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(q => q + 1)}
+                      className="qty-btn"
+                      id="qty-increase"
+                    >+</button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Wishlist Button beside quantity */}
-              <div style={{ marginTop: '1.8rem' }}>
                 <button
                   className={`wishlist-btn-detail ${isInWishlist(product.id) ? 'active' : ''}`}
                   onClick={() => toggleWishlist(product)}
                   title="Add to Wishlist"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    border: '1px solid rgba(97, 58, 104, 0.25)',
-                    background: isInWishlist(product.id) ? 'rgba(233, 30, 99, 0.1)' : '#fff',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill={isInWishlist(product.id) ? "#E91E63" : "none"} stroke={isInWishlist(product.id) ? "#E91E63" : "#3D3D3D"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
                   </svg>
                 </button>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className="product-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-              <button
-                className={`btn btn-primary btn-lg add-to-cart-btn ${added ? 'added' : ''}`}
-                onClick={handleAddToCart}
-                disabled={!product.inStock}
-                id="add-to-cart-detail"
-                style={{ flex: 1 }}
-              >
-                {!product.inStock ? 'Out of Stock' : added ? '✓ Added to Cart!' : 'Add to Cart'}
-              </button>
-              {product.inStock && (
+              <div className="product-actions">
                 <button
-                  className="btn btn-outline btn-lg"
-                  onClick={handleBuyNow}
-                  id="buy-now-btn"
-                  style={{ flex: 1 }}
+                  className={`btn btn-primary add-to-cart-btn ${added ? 'added' : ''}`}
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  id="add-to-cart-detail"
                 >
-                  Buy Now
+                  {!product.inStock ? 'Out of Stock' : added ? '✓ Added to Cart!' : 'Add to Cart'}
                 </button>
-              )}
+                {product.inStock && (
+                  <button
+                    className="btn btn-outline buy-now-btn"
+                    onClick={handleBuyNow}
+                    id="buy-now-btn"
+                  >
+                    Buy Now
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Trust badges */}
