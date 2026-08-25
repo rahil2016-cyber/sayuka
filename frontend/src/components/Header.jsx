@@ -101,7 +101,7 @@ const Header = () => {
       <div className="topbar">
         <div className="container topbar-inner">
           <div className="topbar-ticker">
-            <span>✨ Free Express Shipping on Orders Above ₹1,999</span>
+            <span>✨ Free Express Shipping on Orders Above ₹4,999</span>
             <span className="ticker-bullet">•</span>
             <span>100% Certified &amp; Hallmarked Jewellery</span>
             <span className="ticker-bullet">•</span>

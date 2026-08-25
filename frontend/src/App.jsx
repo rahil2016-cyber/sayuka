@@ -14,6 +14,7 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Admin from './pages/Admin';
 import './index.css';
 
@@ -40,6 +41,7 @@ const AppLayout = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
