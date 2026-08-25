@@ -105,7 +105,7 @@ const Header = () => {
             <span className="ticker-bullet">•</span>
             <span>100% Certified &amp; Hallmarked Jewellery</span>
             <span className="ticker-bullet">•</span>
-            <span>Easy 7-Day Returns</span>
+            <span>Easy 5-Day Returns</span>
           </div>
           <div className="topbar-links">
             <a href="tel:7090908555" className="topbar-phone">

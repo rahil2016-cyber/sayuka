@@ -9,7 +9,7 @@ const ReturnsExchanges = () => {
         
         <div className="privacy-content">
           <h3>Return Policy</h3>
-          <p>We want you to be completely satisfied with your purchase. You may return unused and undamaged items within 7 days of delivery for a full refund or exchange.</p>
+          <p>We want you to be completely satisfied with your purchase. You may return unused and undamaged items within 5 days of delivery for a full refund or exchange.</p>
 
           <h3>Eligibility for Returns</h3>
           <ul>
