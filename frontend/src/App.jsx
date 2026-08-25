@@ -15,6 +15,9 @@ import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
 import Checkout from './pages/Checkout';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import ShippingDelivery from './pages/ShippingDelivery';
+import ReturnsExchanges from './pages/ReturnsExchanges';
+import TermsConditions from './pages/TermsConditions';
 import Admin from './pages/Admin';
 import './index.css';
 
@@ -42,6 +45,9 @@ const AppLayout = () => {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/shipping" element={<ShippingDelivery />} />
+          <Route path="/returns" element={<ReturnsExchanges />} />
+          <Route path="/terms" element={<TermsConditions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

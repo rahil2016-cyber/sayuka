@@ -56,8 +56,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4>Call Us</h4>
-                  <p>+91 98765 43210</p>
-                  <p>+91 98765 43211</p>
+                  <p>7090908555</p>
                 </div>
               </div>
 
@@ -67,8 +66,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4>Email Us</h4>
-                  <p>hello@sayukajewellery.com</p>
-                  <p>support@sayukajewellery.com</p>
+                  <p>info@sayuka.in</p>
                 </div>
               </div>
 
@@ -137,7 +135,7 @@ const Contact = () => {
                     id="phone"
                     name="phone"
                     className="form-input"
-                    placeholder="+91 98765 43210"
+                    placeholder="7090908555"
                     value={form.phone}
                     onChange={handleChange}
                   />
