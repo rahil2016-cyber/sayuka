@@ -1,0 +1,11 @@
+flutter_native_splash:
+  # Blank white only — no logo. Real splash is Flutter SplashScreen.
+  color: "#ffffff"
+  android: true
+  ios: true
+  web: false
+  android_12:
+    color: "#ffffff"
+    # No image → OS shows a minimal/empty splash, not the brand logo.
+  ios_content_mode: center
+  android_gravity: center

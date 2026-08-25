@@ -1,0 +1,6 @@
+*
+!private/
+!public/
+!firebase/
+!firebase/README.md
+!.gitignore

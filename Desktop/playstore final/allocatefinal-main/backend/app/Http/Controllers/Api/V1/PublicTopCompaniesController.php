@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Enums\CompanyVerificationStatus;
+use App\Enums\JobPostStatus;
+use App\Http\Concerns\ApiResponses;
+use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\JobPost;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class PublicTopCompaniesController extends Controller
+{
+    use ApiResponses;
+
+    /** Verified companies with open roles; admin “spotlight” first, then by open role count. */
+    public function index(Request $request): JsonResponse
+    {
+        $limit = min(30, max(1, (int) $request->get('limit', 12)));
+
+        JobPost::runAutoCloseJobs();
+
+        $rows = Company::query()
+            ->where('verification_status', CompanyVerificationStatus::Verified)
+            ->whereHas('jobPosts', function ($q): void {
+                $q->where('status', JobPostStatus::Published)
+                    ->whereNotNull('published_at');
+            })
+            ->withCount([
+                'jobPosts as open_jobs_count' => function ($q): void {
+                    $q->where('status', JobPostStatus::Published)
+                        ->whereNotNull('published_at');
+                },
+            ])
+            ->orderByDesc('is_top_company')
+            ->orderByDesc('open_jobs_count')
+            ->limit($limit)
+            ->get(['id', 'name', 'slug', 'logo_url', 'is_top_company']);
+
+        $data = $rows->map(fn (Company $c) => [
+            'id' => $c->id,
+            'name' => $c->name,
+            'slug' => $c->slug,
+            'logo_url' => $c->logo_url,
+            'company_logo_url' => $c->company_logo_url,
+            'open_jobs_count' => (int) $c->open_jobs_count,
+            'is_top_company' => (bool) $c->is_top_company,
+        ])->values()->all();
+
+        return $this->ok($data, 'OK');
+    }
+}
