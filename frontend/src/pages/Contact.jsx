@@ -46,7 +46,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4>Visit Us</h4>
-                  <p>Rajkendra, Pirodera India<br />Gujarat, India - 382480</p>
+                  <p>Sayuka Jewellery, 169, 3rd main road, PJ Extension, Davanagere</p>
                 </div>
               </div>
 
@@ -186,21 +186,10 @@ const Contact = () => {
             <div className="map-icon">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
             </div>
-            <p>Rajkendra, Pirodera, Gujarat, India</p>
+            <p>Sayuka Jewellery, 169, 3rd main road, PJ Extension, Davanagere</p>
           </div>
         </div>
 
-        {/* Stay Updated */}
-        <div className="stay-updated">
-          <div className="stay-updated-inner">
-            <h3>Stay Updated</h3>
-            <p>Subscribe to get special offers, new arrivals &amp; more.</p>
-            <form className="stay-newsletter" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" placeholder="Enter your email" className="form-input" id="contact-newsletter-email" required />
-              <button type="submit" className="btn btn-primary" id="contact-newsletter-submit">Subscribe</button>
-            </form>
-          </div>
-        </div>
       </div>
     </div>
   );

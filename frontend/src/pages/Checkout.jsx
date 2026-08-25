@@ -44,10 +44,7 @@ const Checkout = () => {
           email: formData.email,
           phone: formData.whatsapp, // Save WhatsApp number as the phone field
         },
-        address:
-          deliveryOption === 'home'
-            ? `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`
-            : 'Store Pickup (Davangere Showroom)',
+        address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
         items: items.map((item) => ({
           name: item.name,
           price: item.price,
@@ -155,95 +152,62 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Delivery Option */}
+            {/* Delivery Address */}
             <div className="checkout-section">
               <h2 className="section-title">
-                <span className="section-icon">📦</span> Delivery Option
+                <span className="section-icon">📍</span> Delivery Address
               </h2>
-              <div className="delivery-options-grid">
-                <button
-                  type="button"
-                  className={`delivery-option-btn ${deliveryOption === 'home' ? 'active' : ''}`}
-                  onClick={() => setDeliveryOption('home')}
-                >
-                  <div className="radio-circle"></div>
-                  <div className="delivery-btn-text">
-                    <strong>Home Delivery</strong>
-                    <span>{totalPrice > 0 && totalPrice < 4999 ? '+₹200 delivery charge' : 'Free delivery'}</span>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  className={`delivery-option-btn ${deliveryOption === 'store' ? 'active' : ''}`}
-                  onClick={() => setDeliveryOption('store')}
-                >
-                  <div className="radio-circle"></div>
-                  <div className="delivery-btn-text">
-                    <strong>Store Pickup</strong>
-                    <span>Free (No delivery charge)</span>
-                  </div>
-                </button>
+              <div className="form-group">
+                <label htmlFor="address">Full Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="House No, Building Name, Street..."
+                  required
+                />
               </div>
-            </div>
-
-            {/* Delivery Address */}
-            {deliveryOption === 'home' && (
-              <div className="checkout-section">
-                <h2 className="section-title">
-                  <span className="section-icon">📍</span> Delivery Address
-                </h2>
+              <div className="form-grid-3">
                 <div className="form-group">
-                  <label htmlFor="address">Full Address</label>
+                  <label htmlFor="city">City</label>
                   <input
                     type="text"
-                    id="address"
-                    name="address"
-                    value={formData.address}
+                    id="city"
+                    name="city"
+                    value={formData.city}
                     onChange={handleChange}
-                    placeholder="House No, Building Name, Street..."
+                    placeholder="City"
                     required
                   />
                 </div>
-                <div className="form-grid-3">
-                  <div className="form-group">
-                    <label htmlFor="city">City</label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="City"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="state">State</label>
-                    <input
-                      type="text"
-                      id="state"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      placeholder="State"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="pincode">Pincode</label>
-                    <input
-                      type="text"
-                      id="pincode"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleChange}
-                      placeholder="Pincode"
-                      required
-                    />
-                  </div>
+                <div className="form-group">
+                  <label htmlFor="state">State</label>
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="State"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="pincode">Pincode</label>
+                  <input
+                    type="text"
+                    id="pincode"
+                    name="pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    placeholder="Pincode"
+                    required
+                  />
                 </div>
               </div>
-            )}
+            </div>
 
             {/* Payment Method */}
             <div className="checkout-section">
