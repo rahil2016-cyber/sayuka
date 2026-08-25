@@ -38,16 +38,22 @@ const About = () => {
             />
           </div>
           <div className="about-text">
-            <p className="section-label">HERITAGE &amp; ARTISTRY</p>
-            <h2 className="about-title">Crafting Memories in Gold &amp; Pure Silver</h2>
+            <p className="section-label">Jewellery that feels like you</p>
+            <h2 className="about-title">Welcome to Sayuka</h2>
             <p className="about-desc">
-              At Sayuka Jewellery, every design is a tribute to Indian heritage combined with modern aesthetic luxury. From 92.5 pure silver and gold-plated masterpieces to Victorian drops and Jadau bridal treasures.
+              Sayuka was born from a shared love for jewellery, fashion and the little details that can transform a look.
             </p>
             <p className="about-desc">
-              We blend traditional jewellery-making techniques with contemporary design to bring you pieces that are timeless yet modern. Each jewel is crafted with extraordinary attention to detail, ensuring 100% certified hallmarked purity with every creation.
+              Founded by sisters Soukya and Sneha, Sayuka is a jewellery brand built around pieces that make getting dressed a little more exciting — whether you’re dressing up for a celebration, putting together a special occasion look, or simply adding something extra to your everyday style.
             </p>
             <p className="about-desc">
-              Founded with a passion for beauty and a commitment to craftsmanship, Sayuka has grown into a trusted name in fine jewellery. From delicate everyday pieces to grand statement collections, we have something for every occasion.
+              Our collections are thoughtfully curated to bring together pieces that feel beautiful, versatile and easy to style, so you can find something that feels just right for you.
+            </p>
+            <p className="about-desc">
+              Because we don’t think jewellery should only be saved for special occasions. Sometimes, all it takes is the right pair of earrings, a necklace or a little sparkle to make you feel that much more put together.
+            </p>
+            <p className="about-desc">
+              At Sayuka, we’re here to help you find those pieces — the ones you reach for again and again, and the ones that make you say, “Okay, this is the look.”
             </p>
           </div>
         </div>
