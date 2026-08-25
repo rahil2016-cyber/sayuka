@@ -39,6 +39,14 @@ export const categoryStructure = [
     ]
   },
   {
+    title: "92.5 Silver Jewellery",
+    slug: "925-silver-jewellery",
+    items: [
+      { name: "Delicate", slug: "delicate-silver" },
+      { name: "Gold Plated", slug: "gold-plated-silver" }
+    ]
+  },
+  {
     title: "Collections",
     slug: "collections",
     items: [
@@ -50,32 +58,6 @@ export const categoryStructure = [
       { name: "Mangalsutra", slug: "mangalsutra" },
       { name: "Mother of Pearl", slug: "mother-of-pearl" },
       { name: "Anti-Tarnish", slug: "anti-tarnish" }
-    ]
-  },
-  {
-    title: "Gold Plated 92.5 Silver Jewellery",
-    slug: "gold-plated-925-silver",
-    items: [
-      { name: "Gold-Plated Necklace", slug: "gold-plated-necklace" },
-      { name: "Gold-Plated Earrings", slug: "gold-plated-earrings" },
-      { name: "Gold-Plated Pendant Sets", slug: "gold-plated-pendant-sets" },
-      { name: "Gold-Plated Bracelets", slug: "gold-plated-bracelets" },
-      { name: "Gold-Plated Accessories", slug: "gold-plated-accessories" },
-      { name: "Gold-Plated Rings", slug: "gold-plated-rings" },
-      { name: "Gold-Plated Chains", slug: "gold-plated-chains" }
-    ]
-  },
-  {
-    title: "92.5 Silver Jewellery",
-    slug: "925-silver-jewellery",
-    items: [
-      { name: "Silver Earrings", slug: "silver-earrings" },
-      { name: "Silver Chains", slug: "silver-chains" },
-      { name: "Silver Pendant Sets", slug: "silver-pendant-sets" },
-      { name: "Silver Bracelets", slug: "silver-bracelets" },
-      { name: "Silver Rings", slug: "silver-rings" },
-      { name: "Silver Toe rings", slug: "silver-toe-rings" },
-      { name: "Silver Accessories", slug: "silver-accessories" }
     ]
   }
 ];

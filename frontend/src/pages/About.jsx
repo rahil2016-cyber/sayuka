@@ -77,7 +77,6 @@ const About = () => {
       <section className="our-promise">
         <div className="container">
           <div className="text-center">
-            <p className="section-label">Our Commitment</p>
             <h2 className="section-title">Our Promise</h2>
             <div className="section-divider"><span>◆</span></div>
           </div>

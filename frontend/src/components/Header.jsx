@@ -14,6 +14,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [expandedMobileCategories, setExpandedMobileCategories] = useState({});
   const { totalItems } = useCart();
   const { wishlistItems } = useWishlist();
@@ -284,6 +285,18 @@ const Header = () => {
               )}
             </div>
 
+            {/* Mobile Search Icon */}
+            <button 
+              className="icon-btn mobile-only" 
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              aria-label="Toggle Search"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+
             {/* Wishlist Heart Icon Trigger */}
             <Link to="/wishlist" className="icon-btn wishlist-btn" aria-label="Wishlist" id="header-wishlist-btn">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -306,7 +319,8 @@ const Header = () => {
         </div>
 
         {/* Mobile Search Bar Row (Under Header on Mobile) */}
-        <div className="mobile-search-container mobile-only" ref={mobileSearchRef}>
+        {isMobileSearchOpen && (
+          <div className="mobile-search-container mobile-only" ref={mobileSearchRef}>
           <form onSubmit={handleSearchSubmit} className="mobile-search-form">
             <input
               id="mobile-search-input"
@@ -348,6 +362,7 @@ const Header = () => {
             </div>
           )}
         </div>
+        )}
       </nav>
 
       {/* Mobile Slide-Out Navigation Drawer */}
@@ -390,7 +405,7 @@ const Header = () => {
             </Link>
           </div>
 
-          <div className="mobile-menu-section-title">WEBSITE CATEGORIES</div>
+          <div className="mobile-menu-section-title">JEWELLERY CATEGORIES</div>
 
           {categoryStructure.map((catSection, sIdx) => (
             <div key={sIdx} className="mobile-cat-accordion">
