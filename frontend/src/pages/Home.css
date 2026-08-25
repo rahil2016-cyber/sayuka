@@ -468,9 +468,9 @@
 
 @media (max-width: 768px) {
   .hero-banner-single {
-    aspect-ratio: 16 / 10;
-    max-height: 360px;
-    min-height: 300px;
+    aspect-ratio: 1 / 1;
+    max-height: 450px;
+    min-height: 350px;
   }
   .hero-content {
     max-width: 100%;

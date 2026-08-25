@@ -630,6 +630,9 @@
   .hamburger { display: flex; }
   .topbar-ticker { font-size: 0.7rem; }
   .topbar-links { display: none; }
+  .nav-right { gap: 10px; }
+  .icon-btn { padding: 4px; }
+  .icon-btn svg { width: 19px; height: 19px; }
 }
 
 /* ============================================
