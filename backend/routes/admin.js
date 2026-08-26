@@ -274,6 +274,67 @@ router.post('/orders', async (req, res) => {
   }
 });
 
+// PUBLIC ORDER TRACKING - no auth required
+router.get('/track/:orderId', async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    if (db.useDb()) {
+      const [rows] = await db.pool().query(
+        'SELECT id, customer_name, total_amount, payment_status, order_status, created_at FROM orders WHERE id = ?',
+        [orderId]
+      );
+      if (rows.length === 0) {
+        return res.status(404).json({ success: false, message: 'Order not found. Please check the tracking code.' });
+      }
+      const order = rows[0];
+      const [items] = await db.pool().query(
+        'SELECT product_name, qty FROM order_items WHERE order_id = ?',
+        [orderId]
+      );
+      // Mask customer name for privacy (show first name only)
+      const nameParts = (order.customer_name || '').split(' ');
+      const maskedName = nameParts[0] + (nameParts.length > 1 ? ' ' + nameParts[nameParts.length - 1][0] + '.' : '');
+      return res.json({
+        success: true,
+        data: {
+          id: order.id,
+          customerName: maskedName,
+          totalAmount: parseFloat(order.total_amount),
+          paymentStatus: order.payment_status,
+          orderStatus: order.order_status,
+          createdAt: order.created_at,
+          itemCount: items.length,
+          items: items.map(i => ({ name: i.product_name, qty: i.qty }))
+        }
+      });
+    }
+
+    // In-memory fallback
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found. Please check the tracking code.' });
+    }
+    const nameParts = (order.customer?.name || '').split(' ');
+    const maskedName = nameParts[0] + (nameParts.length > 1 ? ' ' + nameParts[nameParts.length - 1][0] + '.' : '');
+    return res.json({
+      success: true,
+      data: {
+        id: order.id,
+        customerName: maskedName,
+        totalAmount: order.totalAmount,
+        paymentStatus: order.paymentStatus,
+        orderStatus: order.orderStatus,
+        createdAt: order.createdAt,
+        itemCount: order.items?.length || 0,
+        items: (order.items || []).map(i => ({ name: i.name, qty: i.qty }))
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 router.put('/orders/:id/status', verifyAdmin, async (req, res) => {
   try {
     const { status } = req.body;

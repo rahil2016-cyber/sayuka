@@ -1,0 +1,392 @@
+/* ================================================
+   TRACK ORDER PAGE — SAYUKA JEWELLERY
+   ================================================ */
+
+.track-order-page {
+  background: linear-gradient(135deg, #faf6fc 0%, #f0e8f5 100%);
+  min-height: 80vh;
+  padding: 3rem 1rem 5rem;
+}
+
+.track-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Header */
+.track-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.track-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #613a68, #7b4c84);
+  border-radius: 50%;
+  color: white;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 24px rgba(97, 58, 104, 0.3);
+}
+
+.track-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--color-deep-purple);
+  margin-bottom: 0.5rem;
+}
+
+.track-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Search Form */
+.track-search-form {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(97, 58, 104, 0.08);
+  border: 1px solid rgba(97, 58, 104, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.track-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.track-input {
+  flex: 1;
+  padding: 0.85rem 1.25rem;
+  border: 2px solid var(--color-gray-200);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s;
+  outline: none;
+  letter-spacing: 0.5px;
+}
+
+.track-input:focus {
+  border-color: var(--color-deep-purple);
+}
+
+.track-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  white-space: nowrap;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.track-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.track-error {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #fff2f2;
+  border: 1px solid #ffcdd2;
+  color: #c62828;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* Result Card */
+.track-result-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(97, 58, 104, 0.1);
+  border: 1px solid rgba(97, 58, 104, 0.12);
+  animation: fadeSlideUp 0.4s ease;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.track-result-top {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
+  margin-bottom: 1.75rem;
+}
+
+.track-result-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.track-result-id {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-deep-purple);
+  background: rgba(97, 58, 104, 0.07);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.track-result-date {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+}
+
+.track-result-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.track-result-amount {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-deep-purple);
+}
+
+/* Timeline */
+.track-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 1.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.track-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 80px;
+}
+
+.step-dot-wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.6rem;
+}
+
+.step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid var(--color-gray-300);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.track-step.done .step-dot {
+  background: var(--color-deep-purple);
+  border-color: var(--color-deep-purple);
+}
+
+.track-step.active .step-dot {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px rgba(230, 168, 80, 0.2);
+}
+
+.step-line {
+  flex: 1;
+  height: 2.5px;
+  background: var(--color-gray-200);
+  transition: background 0.3s ease;
+}
+
+.track-step.done .step-line {
+  background: var(--color-deep-purple);
+}
+
+.step-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-align: center;
+}
+
+.step-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.track-step.done .step-name,
+.track-step.active .step-name {
+  color: var(--color-text-primary);
+}
+
+.step-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+  color: #5a3a00;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Cancelled */
+.track-cancelled-banner {
+  background: #fff3e0;
+  border: 1px solid #ffe0b2;
+  color: #bf360c;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* Items */
+.track-items-section {
+  border-top: 1px solid var(--color-gray-200);
+  padding-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.track-items-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.track-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.track-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-gray-100);
+  border-radius: 8px;
+  font-size: 0.88rem;
+}
+
+.track-item-name {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.track-item-qty {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* Payment */
+.track-payment-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  border-top: 1px solid var(--color-gray-200);
+  padding-top: 1rem;
+}
+
+.track-payment-label {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.track-payment-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.track-payment-badge.completed,
+.track-payment-badge.paid {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.track-payment-badge.pending {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.track-payment-badge.failed {
+  background: #fce4ec;
+  color: #b71c1c;
+}
+
+/* Help text */
+.track-help {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px dashed var(--color-gray-300);
+}
+
+.track-contact-link {
+  color: var(--color-deep-purple);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.track-contact-link:hover {
+  color: var(--color-gold-dark);
+}
+
+@media (max-width: 480px) {
+  .track-input-row {
+    flex-direction: column;
+  }
+  .track-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .track-result-top {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+}

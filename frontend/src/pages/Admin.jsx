@@ -207,7 +207,8 @@ const Admin = () => {
     if (window.confirm("Delete this banner?")) {
       try {
         await adminAPI.deleteBanner(id);
-        loadAdminData();
+        // Optimistic update: remove immediately from local state so it doesn't reappear
+        setBanners(prev => prev.filter(b => b.id !== id));
       } catch (err) {
         alert("Failed to delete banner");
       }

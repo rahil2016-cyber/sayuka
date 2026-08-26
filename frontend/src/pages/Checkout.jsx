@@ -67,24 +67,47 @@ const Checkout = () => {
   };
 
   if (orderSuccess) {
+    const trackUrl = `/track-order?id=${encodeURIComponent(orderSuccess.id)}`;
     return (
       <div className="checkout-page page-content text-center">
         <div className="container success-container">
           <div className="success-icon">🎉</div>
           <h1 className="success-title">Order Placed Successfully!</h1>
-          <p className="success-order-id">Order ID: <strong>{orderSuccess.id}</strong></p>
-          <div className="success-card">
-            <h3>Thank you, {orderSuccess.customer.name}!</h3>
-            <p>Your order details have been received. We will connect with you on WhatsApp (<strong>{orderSuccess.customer.phone}</strong>) shortly.</p>
-            <div className="success-amount">Total paid: {formatPrice(orderSuccess.totalAmount)}</div>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+            Thank you, <strong>{orderSuccess.customer.name}</strong>! We'll connect with you on WhatsApp (<strong>{orderSuccess.customer.phone}</strong>) shortly.
+          </p>
+
+          {/* Tracking Code Box */}
+          <div className="tracking-code-box">
+            <div className="tracking-code-label">🔖 Your Order Tracking Code</div>
+            <div className="tracking-code-value">{orderSuccess.id}</div>
+            <div className="tracking-code-hint">Save this code to track your order status anytime</div>
+            <button
+              className="copy-code-btn"
+              onClick={() => {
+                navigator.clipboard.writeText(orderSuccess.id);
+                alert('Tracking code copied!');
+              }}
+            >
+              📋 Copy Code
+            </button>
           </div>
-          <Link to="/collections" className="btn btn-primary btn-lg mt-4">
-            Continue Shopping
-          </Link>
+
+          <div className="success-amount">Total: {formatPrice(orderSuccess.totalAmount)}</div>
+
+          <div className="success-actions">
+            <Link to={trackUrl} className="btn btn-primary btn-lg">
+              📦 Track My Order
+            </Link>
+            <Link to="/collections" className="btn btn-outline btn-lg">
+              Continue Shopping
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
+
 
   if (items.length === 0) {
     return (

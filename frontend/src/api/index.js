@@ -26,6 +26,7 @@ export const adminAPI = {
   getOrders: () => api.get('/admin/orders'),
   createOrder: (data) => api.post('/admin/orders', data),
   updateOrderStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }),
+  trackOrder: (orderId) => api.get(`/admin/track/${orderId}`),
   getBanners: () => api.get('/admin/banners'),
   createBanner: (data) => api.post('/admin/banners', data),
   deleteBanner: (id) => api.delete(`/admin/banners/${id}`),

@@ -19,6 +19,7 @@ import ShippingDelivery from './pages/ShippingDelivery';
 import ReturnsExchanges from './pages/ReturnsExchanges';
 import TermsConditions from './pages/TermsConditions';
 import Admin from './pages/Admin';
+import TrackOrder from './pages/TrackOrder';
 import './index.css';
 
 // Scroll to top on route change
@@ -48,6 +49,7 @@ const AppLayout = () => {
           <Route path="/shipping" element={<ShippingDelivery />} />
           <Route path="/returns" element={<ReturnsExchanges />} />
           <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/track-order" element={<TrackOrder />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
