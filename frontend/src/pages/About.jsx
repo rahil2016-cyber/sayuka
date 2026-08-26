@@ -92,22 +92,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="about-cta">
-        <div className="container">
-          <div className="about-cta-inner">
-            <p className="section-label">Explore Our Work</p>
-            <h2 className="about-cta-title">Find Your Perfect Piece</h2>
-            <p className="about-cta-desc">
-              Browse our curated collection of handcrafted jewellery.
-            </p>
-            <div className="about-cta-actions">
-              <Link to="/collections" className="btn btn-white btn-lg">Explore Collections</Link>
-              <Link to="/custom-jewellery" className="btn btn-outline btn-lg" style={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}>Custom Jewellery</Link>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

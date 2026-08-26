@@ -212,8 +212,8 @@ const Home = () => {
           {heroSlides.map((slide, idx) => (
             <div key={slide.id} className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}>
               <img src={slide.image} alt={slide.title} className="hero-banner-img" />
-              <div className="hero-overlay" />
-              <div className="container hero-content-container">
+            <div className="hero-overlay" />
+              <div className="hero-content-container">
                 <div className="hero-content">
                   <span className="hero-label">SAYUKA LUXURY JEWELLERY</span>
                   <h1 className="hero-title">{slide.title}</h1>

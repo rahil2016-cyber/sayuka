@@ -98,25 +98,26 @@ const Header = () => {
 
   return (
     <header className="header-wrapper" ref={dropdownRef}>
-      {/* Top Announcement Bar - Shopify Style */}
+      {/* Top Announcement Bar — Live Scrolling Marquee */}
       <div className="topbar">
-        <div className="container topbar-inner">
-          <div className="topbar-ticker">
+        <div className="topbar-marquee-wrap">
+          <div className="topbar-marquee">
             <span>✨ Free Express Shipping on Orders Above ₹4,999</span>
             <span className="ticker-bullet">•</span>
             <span>100% Certified &amp; Hallmarked Jewellery</span>
             <span className="ticker-bullet">•</span>
             <span>Easy 5-Day Returns</span>
-          </div>
-          <div className="topbar-links">
-            <a href="tel:7090908555" className="topbar-phone">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-              </svg>
-              7090908555
-            </a>
-            <span className="topbar-divider">|</span>
-            <Link to="/contact">Track Order</Link>
+            <span className="ticker-bullet">•</span>
+            <span>📞 Call us: 7090908555</span>
+            <span className="ticker-bullet">•</span>
+            <span>✨ Free Express Shipping on Orders Above ₹4,999</span>
+            <span className="ticker-bullet">•</span>
+            <span>100% Certified &amp; Hallmarked Jewellery</span>
+            <span className="ticker-bullet">•</span>
+            <span>Easy 5-Day Returns</span>
+            <span className="ticker-bullet">•</span>
+            <span>📞 Call us: 7090908555</span>
+            <span className="ticker-bullet">•</span>
           </div>
         </div>
       </div>
@@ -227,6 +228,9 @@ const Header = () => {
 
             <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>
               About Us
+            </Link>
+            <Link to="/track-order" className={`nav-link ${location.pathname === '/track-order' ? 'active' : ''}`}>
+              Track Order
             </Link>
             <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}>
               Contact
@@ -466,6 +470,7 @@ const Header = () => {
             <li><Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link></li>
             <li><Link to="/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link></li>
             <li><Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</Link></li>
+            <li><Link to="/track-order" onClick={() => setMobileMenuOpen(false)}>📦 Track Order</Link></li>
           </ul>
         </div>
       </aside>

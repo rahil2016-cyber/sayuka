@@ -8,62 +8,58 @@
   transition: all var(--transition-normal);
 }
 
-/* Topbar Announcement */
+/* Topbar Announcement — Live Scrolling Marquee */
 .topbar {
   background: #412247;
   color: var(--color-cream);
   font-size: 0.75rem;
-  padding: 6px 0;
+  padding: 7px 0;
   border-bottom: 1px solid rgba(230, 168, 80, 0.2);
+  overflow: hidden;
 }
 
-.topbar-inner {
+/* Marquee wrapper clips content */
+.topbar-marquee-wrap {
+  width: 100%;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
-.topbar-ticker {
+/* The scrolling strip — duplicated content ensures seamless loop */
+.topbar-marquee {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
+  white-space: nowrap;
+  animation: marquee-scroll 30s linear infinite;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: rgba(248, 245, 240, 0.95);
-  overflow: hidden;
-  white-space: nowrap;
+}
+
+.topbar-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .ticker-bullet {
   color: var(--color-gold);
+  flex-shrink: 0;
 }
 
-.topbar-links {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(248, 245, 240, 0.8);
-}
-
-.topbar-phone {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.topbar-links a {
-  color: rgba(248, 245, 240, 0.85);
-  transition: color var(--transition-fast);
-  text-decoration: none;
-}
-
-.topbar-links a:hover {
-  color: var(--color-gold);
-}
-
-.topbar-divider {
-  opacity: 0.3;
-}
+/* Keep old classes harmless if still referenced */
+.topbar-inner { display: flex; justify-content: space-between; align-items: center; }
+.topbar-ticker { display: flex; align-items: center; gap: 12px; }
+.topbar-links { display: flex; align-items: center; gap: 12px; }
+.topbar-phone { display: flex; align-items: center; gap: 4px; }
+.topbar-links a { color: rgba(248, 245, 240, 0.85); text-decoration: none; }
+.topbar-links a:hover { color: var(--color-gold); }
+.topbar-divider { opacity: 0.3; }
 
 /* Main Nav */
 .main-nav {
