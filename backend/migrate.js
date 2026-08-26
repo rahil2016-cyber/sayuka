@@ -1,22 +1,6 @@
 const db = require('./config/db');
 const productsData = require('./data/products');
 
-// Default initial banners
-const defaultBanners = [
-  {
-    title: "Timeless Heritage Collection",
-    subtitle: "Handcrafted gold plated 92.5 silver & Jadau sets",
-    image: "https://images.unsplash.com/photo-1610694955371-d4a3e0ce4b52?w=1600&q=95",
-    link: "/collections?category=gold-plated-necklace"
-  },
-  {
-    title: "Modern CZ & Diamond Sparkle",
-    subtitle: "Brilliant craftsmanship designed to shine for every occasion",
-    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=1600&q=95",
-    link: "/collections?category=cz"
-  }
-];
-
 // Default initial categories
 const defaultCategories = [
   // Fashion Jewellery
@@ -202,21 +186,20 @@ async function migrate(shouldExit = false) {
       `, [cat.name, cat.slug, cat.image]);
     }
 
-    // 3. Seed Banners (Idempotent)
-    console.log('🌱 Seeding Banners...');
-    for (const banner of defaultBanners) {
-      const [rows] = await connection.query('SELECT id FROM banners WHERE title = ?', [banner.title]);
-      if (rows.length === 0) {
-        await connection.query(`
-          INSERT INTO banners (title, subtitle, image, link)
-          VALUES (?, ?, ?, ?)
-        `, [banner.title, banner.subtitle, banner.image, banner.link]);
-      } else {
-        await connection.query(`
-          UPDATE banners SET subtitle = ?, image = ?, link = ? WHERE title = ?
-        `, [banner.subtitle, banner.image, banner.link, banner.title]);
-      }
+
+    // NOTE: Banners are intentionally NOT seeded here.
+    // They are managed exclusively via the Admin panel.
+    // Seeding defaults caused deleted banners to return on every deploy.
+
+    // One-time cleanup: remove any leftover hardcoded default banners from the DB
+    const staleDefaultTitles = [
+      'Timeless Heritage Collection',
+      'Modern CZ & Diamond Sparkle'
+    ];
+    for (const title of staleDefaultTitles) {
+      await connection.query('DELETE FROM banners WHERE title = ?', [title]);
     }
+    console.log('✅ Cleared any stale default banners from DB.');
 
     // 4. Seed Products (Idempotent)
     console.log('🌱 Seeding Products...');

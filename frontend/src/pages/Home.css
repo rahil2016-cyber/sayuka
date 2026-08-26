@@ -23,7 +23,7 @@
 .hero-banner-single {
   position: relative;
   width: 100%;
-  height: 480px;
+  height: 420px;
   background: #1f1122;
   overflow: hidden;
   margin-top: 0;
@@ -52,65 +52,77 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center center;
+  display: block;
 }
 
+/* Strong bottom fade so text is always legible on mobile */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(45, 18, 45, 0.15) 0%,
-    rgba(45, 18, 45, 0.55) 55%,
-    rgba(45, 18, 45, 0.85) 100%
+    rgba(31, 17, 34, 0.1) 0%,
+    rgba(31, 17, 34, 0.4) 40%,
+    rgba(31, 17, 34, 0.82) 100%
   );
+  z-index: 2;
 }
 
+/* Text sits at the bottom, always visible */
 .hero-content-container {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: flex-end;
-  padding: 0 20px 36px;
+  padding: 0 20px 32px 20px;
   z-index: 5;
 }
 
 .hero-content {
   width: 100%;
-  max-width: 580px;
+  max-width: 600px;
   color: #fff;
 }
 
 .hero-label {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   color: #e6a850;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   text-transform: uppercase;
 }
 
 .hero-title {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.6rem, 5vw, 3.4rem);
+  font-size: clamp(1.55rem, 6vw, 3.2rem);
   font-weight: 700;
   line-height: 1.15;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 
 .hero-desc {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 18px;
   line-height: 1.5;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
 }
 
 .hero-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
+}
+
+/* Smaller buttons on mobile */
+.hero-actions .btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.78rem;
 }
 
 .hero-nav {
@@ -118,11 +130,11 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   color: #fff;
   display: flex;
   align-items: center;
@@ -138,55 +150,68 @@
   color: #2D122D;
 }
 
-.hero-nav.prev { left: 12px; }
-.hero-nav.next { right: 12px; }
+.hero-nav.prev { left: 10px; }
+.hero-nav.next { right: 10px; }
 
 .hero-dots {
   position: absolute;
-  bottom: 14px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .hero-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.45);
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .hero-dot.active {
   background: #e6a850;
-  transform: scale(1.25);
+  transform: scale(1.4);
 }
 
-/* Desktop: wider banner */
+/* ── Desktop (768px+) ── */
 @media (min-width: 768px) {
   .hero-banner-single {
-    height: 500px;
+    height: 520px;
   }
   .hero-content-container {
     align-items: center;
-    padding: 0 40px;
+    padding: 0 60px;
   }
   .hero-overlay {
     background: linear-gradient(
       90deg,
-      rgba(45, 18, 45, 0.75) 0%,
-      rgba(45, 18, 45, 0.35) 55%,
-      transparent 100%
+      rgba(31, 17, 34, 0.78) 0%,
+      rgba(31, 17, 34, 0.38) 55%,
+      rgba(31, 17, 34, 0.05) 100%
     );
   }
   .hero-nav.prev { left: 24px; }
   .hero-nav.next { right: 24px; }
   .hero-nav { width: 44px; height: 44px; }
+  .hero-actions .btn {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
+  }
+  .hero-dots { bottom: 20px; }
+  .hero-dot { width: 11px; height: 11px; }
 }
+
+/* ── Large desktop (1200px+) ── */
+@media (min-width: 1200px) {
+  .hero-banner-single { height: 580px; }
+}
+
+
 
 
 /* ============================================

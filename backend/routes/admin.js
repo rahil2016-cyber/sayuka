@@ -44,23 +44,9 @@ let orders = [
   }
 ];
 
-// In-memory banners state (fallback)
-let banners = [
-  {
-    id: 1,
-    title: "Timeless Heritage Collection",
-    subtitle: "Handcrafted gold plated 92.5 silver & Jadau sets",
-    image: "https://images.unsplash.com/photo-1610694955371-d4a3e0ce4b52?w=1600&q=95",
-    link: "/collections?category=gold-plated-necklace"
-  },
-  {
-    id: 2,
-    title: "Modern CZ & Diamond Sparkle",
-    subtitle: "Brilliant craftsmanship designed to shine for every occasion",
-    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=1600&q=95",
-    link: "/collections?category=cz"
-  }
-];
+// In-memory banners state — starts empty, managed via Admin panel only
+let banners = [];
+
 
 // In-memory shop categories (fallback)
 let shopCategories = [
