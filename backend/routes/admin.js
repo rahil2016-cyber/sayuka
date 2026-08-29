@@ -310,6 +310,39 @@ router.post('/orders/create-payment-session', async (req, res) => {
   }
 });
 
+// PUBLIC ORDER HISTORY - lookup by email or phone
+router.get('/track/history', async (req, res) => {
+  try {
+    const contact = (req.query.contact || '').trim();
+    if (!contact) {
+      return res.status(400).json({ success: false, message: 'Contact information is required.' });
+    }
+
+    if (db.useDb()) {
+      const [rows] = await db.pool().query(
+        'SELECT id, created_at, total_amount, payment_status, order_status FROM orders WHERE customer_email = ? OR customer_phone = ? ORDER BY created_at DESC',
+        [contact, contact]
+      );
+      return res.json({ success: true, data: rows });
+    }
+
+    // In-memory fallback
+    const matchedOrders = orders.filter(
+      o => o.customer?.email === contact || o.customer?.phone === contact
+    ).map(o => ({
+      id: o.id,
+      created_at: o.createdAt,
+      total_amount: o.totalAmount,
+      payment_status: o.paymentStatus,
+      order_status: o.orderStatus
+    }));
+    
+    return res.json({ success: true, data: matchedOrders });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // PUBLIC ORDER TRACKING - no auth required
 router.get('/track/:orderId', async (req, res) => {
   try {

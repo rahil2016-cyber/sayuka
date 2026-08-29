@@ -28,7 +28,7 @@ class CashfreeService {
           customer_name: customer.name
         },
         order_meta: {
-          return_url: "http://localhost:5173/checkout?order_id={order_id}"
+          return_url: `${process.env.FRONTEND_URL || 'https://sayuka.in'}/checkout?order_id={order_id}`
         }
       };
 

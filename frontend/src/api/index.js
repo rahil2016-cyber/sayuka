@@ -28,6 +28,7 @@ export const adminAPI = {
   createPaymentSession: (data) => api.post('/admin/orders/create-payment-session', data),
   updateOrderStatus: (id, status) => api.put(`/admin/orders/${encodeURIComponent(id)}/status`, { status }),
   trackOrder: (orderId) => api.get(`/admin/track/${encodeURIComponent(orderId)}`),
+  trackHistory: (contact) => api.get(`/admin/track/history?contact=${encodeURIComponent(contact)}`),
   getBanners: () => api.get('/admin/banners'),
   createBanner: (data) => api.post('/admin/banners', data),
   deleteBanner: (id) => api.delete(`/admin/banners/${id}`),

@@ -10,6 +10,7 @@ const TrackOrder = () => {
   const [orderId, setOrderId] = useState(searchParams.get('id') || '');
   const [inputId, setInputId] = useState(searchParams.get('id') || '');
   const [result, setResult] = useState(null);
+  const [history, setHistory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,11 +26,26 @@ const TrackOrder = () => {
     setLoading(true);
     setError('');
     setResult(null);
+    setHistory(null);
+
+    const isContact = trimmed.includes('@') || /^\d{8,15}$/.test(trimmed.replace(/\s+/g, ''));
+
     try {
-      const res = await adminAPI.trackOrder(trimmed);
-      if (res.data.success) {
-        setResult(res.data.data);
-        setOrderId(trimmed);
+      if (isContact) {
+        const res = await adminAPI.trackHistory(trimmed);
+        if (res.data.success) {
+          if (res.data.data.length === 0) {
+            setError('No orders found for this contact information.');
+          } else {
+            setHistory(res.data.data);
+          }
+        }
+      } else {
+        const res = await adminAPI.trackOrder(trimmed);
+        if (res.data.success) {
+          setResult(res.data.data);
+          setOrderId(trimmed);
+        }
       }
     } catch (err) {
       if (err.response?.status === 404) {
@@ -76,7 +92,7 @@ const TrackOrder = () => {
             </svg>
           </div>
           <h1 className="track-title">Track Your Order</h1>
-          <p className="track-subtitle">Enter your order ID to see real-time delivery status</p>
+          <p className="track-subtitle">Enter your Order ID, Email, or Phone Number to view your orders</p>
         </div>
 
         {/* Search Form */}
@@ -85,7 +101,7 @@ const TrackOrder = () => {
             <input
               type="text"
               className="track-input"
-              placeholder="e.g. #SAYUKA123456"
+              placeholder="Order ID, Email, or Phone (e.g. #SAYUKA... or 9876543210)"
               value={inputId}
               onChange={e => setInputId(e.target.value)}
               required
@@ -106,8 +122,37 @@ const TrackOrder = () => {
           {error && <div className="track-error">{error}</div>}
         </form>
 
-        {/* Result */}
-        {result && (
+        {/* History Result */}
+        {history && (
+          <div className="track-history-list">
+            <h2 className="track-history-title">Your Orders</h2>
+            <div className="track-history-cards">
+              {history.map(order => (
+                <div key={order.id} className="track-history-card">
+                  <div className="track-history-card-header">
+                    <div className="track-history-id">{order.id}</div>
+                    <div className="track-history-date">{formatDate(order.created_at || order.createdAt)}</div>
+                  </div>
+                  <div className="track-history-card-body">
+                    <div className="track-history-status">
+                      Status: <span className={`track-payment-badge ${order.order_status?.toLowerCase() || order.orderStatus?.toLowerCase()}`}>{order.order_status || order.orderStatus}</span>
+                    </div>
+                    <div className="track-history-total">
+                      Total: ₹{parseFloat(order.total_amount || order.totalAmount).toLocaleString('en-IN')}
+                    </div>
+                  </div>
+                  <button className="btn btn-primary track-history-btn" onClick={() => {
+                    setInputId(order.id);
+                    handleTrack(order.id);
+                  }}>Track Order</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Single Result */}
+        {result && !history && (
           <div className="track-result-card">
             <div className="track-result-top">
               <div>
