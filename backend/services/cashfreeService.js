@@ -6,6 +6,17 @@ class CashfreeService {
       const isProd = process.env.CASHFREE_ENVIRONMENT === 'production';
       const baseURL = isProd ? 'https://api.cashfree.com/pg' : 'https://sandbox.cashfree.com/pg';
 
+      const appId = (process.env.CASHFREE_APP_ID || '').trim();
+      const secret = (process.env.CASHFREE_SECRET_KEY || '').trim();
+
+      console.log(`[Cashfree Debug] Environment: ${process.env.CASHFREE_ENVIRONMENT}`);
+      console.log(`[Cashfree Debug] App ID prefix: ${appId.substring(0, 5)}... (Length: ${appId.length})`);
+      console.log(`[Cashfree Debug] Secret prefix: ${secret.substring(0, 5)}... (Length: ${secret.length})`);
+
+      if (!appId || !secret) {
+        throw new Error('Cashfree credentials are missing in the environment variables!');
+      }
+
       const requestPayload = {
         order_amount: amount,
         order_currency: "INR",
@@ -23,8 +34,8 @@ class CashfreeService {
 
       const response = await axios.post(`${baseURL}/orders`, requestPayload, {
         headers: {
-          'x-client-id': process.env.CASHFREE_APP_ID,
-          'x-client-secret': process.env.CASHFREE_SECRET_KEY,
+          'x-client-id': appId,
+          'x-client-secret': secret,
           'x-api-version': '2023-08-01',
           'Content-Type': 'application/json',
           'Accept': 'application/json'
