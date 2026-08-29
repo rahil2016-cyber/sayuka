@@ -144,6 +144,7 @@ router.get('/orders', verifyAdmin, async (req, res) => {
           whatsappConsent: !!order.whatsapp_consent,
           items: items.map(i => ({
             ...i,
+            name: i.product_name,
             price: parseFloat(i.price)
           }))
         });
