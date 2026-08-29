@@ -131,15 +131,28 @@ const Home = () => {
     adminAPI.getBanners().then(res => {
       if (res.data.data && res.data.data.length > 0) {
         setHeroSlides(res.data.data);
+      } else {
+        setHeroSlides(defaultHeroSlides);
       }
-    }).catch(() => {});
+    }).catch(() => {
+      setHeroSlides(defaultHeroSlides);
+    });
 
     // Fetch shop categories from backend
     adminAPI.getCategories().then(res => {
       if (res.data.data && res.data.data.length > 0) {
-        setCategoryCards(res.data.data);
+        const mergedCategories = res.data.data.map(dbCat => {
+          const defaultCat = defaultCategoryCards.find(d => d.slug === dbCat.slug);
+          return {
+            ...dbCat,
+            image: dbCat.image || defaultCat?.image || 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80'
+          };
+        });
+        setCategoryCards(mergedCategories);
       }
-    }).catch(() => {}); // Falls back to defaultCategoryCards
+    }).catch(() => {
+      setCategoryCards(defaultCategoryCards);
+    });
   }, []);
 
   useEffect(() => {
