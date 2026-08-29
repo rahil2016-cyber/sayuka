@@ -467,7 +467,6 @@ const Header = () => {
           <div className="mobile-drawer-divider" />
 
           <ul className="mobile-primary-links">
-            <li><Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link></li>
             <li><Link to="/about" onClick={() => setMobileMenuOpen(false)}>About Us</Link></li>
             <li><Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</Link></li>
             <li><Link to="/track-order" onClick={() => setMobileMenuOpen(false)}>📦 Track Order</Link></li>

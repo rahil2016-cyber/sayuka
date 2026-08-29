@@ -217,24 +217,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Hero Navigation Controls */}
-        <button className="hero-nav prev" onClick={handlePrevSlide} aria-label="Previous slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button className="hero-nav next" onClick={handleNextSlide} aria-label="Next slide">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
 
-        <div className="hero-dots">
-          {heroSlides.map((_, idx) => (
-            <button
-              key={idx}
-              className={`hero-dot ${idx === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(idx)}
-              aria-label={`Slide ${idx + 1}`}
-            />
-          ))}
-        </div>
       </section>
 
       {/* SECTION 1: Shop by Category */}

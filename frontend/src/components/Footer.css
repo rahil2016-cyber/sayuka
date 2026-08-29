@@ -140,6 +140,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  list-style: none;
 }
 
 .footer-links li a {
@@ -227,18 +234,103 @@
 }
 
 @media (max-width: 768px) {
+  .footer {
+    height: auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .footer * {
+    box-sizing: border-box;
+  }
+
+  .footer-features {
+    padding: 32px 24px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-item {
+    gap: 16px;
+    align-items: center;
+  }
+
+  .feature-icon {
+    margin-top: 0;
+  }
+  
+  .feature-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .feature-text h4 {
+    margin-bottom: 2px;
+  }
+
+  .footer-main {
+    padding: 36px 24px;
+  }
+
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-8);
+    gap: 32px;
   }
+
   .footer-brand {
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sayuka-logo-footer {
+    width: 100%;
+    max-width: 210px;
+    height: auto;
+    margin-bottom: 4px;
+  }
+
+  .footer-tagline {
+    margin-bottom: 4px;
+  }
+
+  .footer-socials {
+    margin-top: 8px;
+    gap: 12px;
+  }
+
+  .footer-socials a {
+    width: 44px;
+    height: 44px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-col-title {
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    gap: 14px;
+  }
+
+  .footer-bottom {
+    padding: 20px 24px;
   }
 }
 
 @media (max-width: 480px) {
   .features-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-6);
+    gap: 18px;
+  }
+  .footer-grid {
+    gap: 28px;
   }
 }
