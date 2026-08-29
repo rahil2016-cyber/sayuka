@@ -38,32 +38,73 @@ const Checkout = () => {
 
     setIsSubmitting(true);
     try {
-      const orderPayload = {
-        customer: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.whatsapp, // Save WhatsApp number as the phone field
-        },
-        address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
-        items: items.map((item) => ({
-          name: item.name,
-          price: item.price,
-          qty: item.quantity,
-        })),
-        totalAmount: grandTotal,
-        paymentMethod: 'Online Payment',
+      const customer = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.whatsapp,
       };
 
-      const res = await adminAPI.createOrder(orderPayload);
-      if (res.data.success) {
-        setOrderSuccess(res.data.data);
-        clearCart();
+      // 1. Create a payment session in backend
+      const sessionRes = await adminAPI.createPaymentSession({
+        totalAmount: grandTotal,
+        customer,
+      });
+
+      if (!sessionRes.data.success) {
+        throw new Error('Failed to create payment session');
       }
+
+      const { payment_session_id } = sessionRes.data;
+
+      // 2. Initialize Cashfree
+      if (!window.Cashfree) {
+         throw new Error('Payment gateway failed to load');
+      }
+      
+      const cashfree = window.Cashfree({
+        mode: "sandbox", // Change to production when live
+      });
+
+      // 3. Open Checkout
+      let checkoutOptions = {
+        paymentSessionId: payment_session_id,
+        redirectTarget: "_modal" 
+      };
+
+      cashfree.checkout(checkoutOptions).then(async (result) => {
+        if(result.error){
+            console.error("Payment failed", result.error);
+            alert("Payment failed or cancelled!");
+            setIsSubmitting(false);
+        }
+        if(result.paymentDetails){
+            console.log("Payment success", result.paymentDetails);
+            
+            // 4. Create the final order on success
+            const orderPayload = {
+              customer,
+              address: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+              items: items.map((item) => ({
+                name: item.name,
+                price: item.price,
+                qty: item.quantity,
+              })),
+              totalAmount: grandTotal,
+              paymentMethod: 'Cashfree',
+              whatsappConsent: true
+            };
+
+            const res = await adminAPI.createOrder(orderPayload);
+            if (res.data.success) {
+              setOrderSuccess(res.data.data);
+              clearCart();
+            }
+        }
+      });
     } catch (err) {
       alert('Order placement failed: ' + (err.response?.data?.message || err.message));
-    } finally {
       setIsSubmitting(false);
-    }
+    } 
   };
 
   if (orderSuccess) {

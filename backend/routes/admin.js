@@ -6,6 +6,7 @@ const verifyAdmin = require('../middleware/auth');
 const loginLimiter = require('../middleware/limiter');
 const products = require('../data/products');
 const db = require('../config/db');
+const whatsappService = require('../services/whatsappService');
 
 // In-memory orders state (fallback)
 let orders = [
@@ -232,6 +233,11 @@ router.post('/orders', async (req, res) => {
           paymentStatus: 'Pending'
         };
         
+        // Send WhatsApp confirmation if consented
+        if (whatsappConsent && customer.phone) {
+          whatsappService.sendOrderConfirmation(customer.phone, orderId, customer.name);
+        }
+
         return res.status(201).json({ success: true, data: createdOrder });
       } catch (transactionErr) {
         await conn.rollback();
@@ -254,7 +260,29 @@ router.post('/orders', async (req, res) => {
       createdAt: new Date().toISOString()
     };
     orders.unshift(newOrder);
+
+    // Send WhatsApp confirmation if consented
+    if (whatsappConsent && customer.phone) {
+      whatsappService.sendOrderConfirmation(customer.phone, newOrder.id, customer.name);
+    }
+
     res.status(201).json({ success: true, data: newOrder });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+const cashfreeService = require('../services/cashfreeService');
+
+// Create Cashfree Payment Session
+router.post('/orders/create-payment-session', async (req, res) => {
+  try {
+    const { totalAmount, customer } = req.body;
+    const orderId = "PAY_" + Math.floor(100000 + Math.random() * 900000);
+    
+    const sessionData = await cashfreeService.createPaymentSession(orderId, totalAmount, customer);
+    
+    res.json({ success: true, payment_session_id: sessionData.payment_session_id, order_id: orderId });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -330,12 +358,33 @@ router.put('/orders/:id/status', verifyAdmin, async (req, res) => {
       if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Order not found' });
       
       const [rows] = await db.pool().query('SELECT * FROM orders WHERE id = ?', [req.params.id]);
-      return res.json({ success: true, data: rows[0] });
+      const order = rows[0];
+
+      // Send WhatsApp update if consented
+      if (order.whatsapp_consent && order.customer_phone) {
+        if (status === 'Shipped') {
+          whatsappService.sendOrderShipped(order.customer_phone, order.id, 'N/A');
+        } else if (status === 'Delivered') {
+          whatsappService.sendOrderDelivered(order.customer_phone, order.id);
+        }
+      }
+
+      return res.json({ success: true, data: order });
     }
 
     const order = orders.find(o => o.id === req.params.id);
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
     order.orderStatus = status;
+
+    // Send WhatsApp update if consented
+    if (order.customer?.phone) {
+      if (status === 'Shipped') {
+        whatsappService.sendOrderShipped(order.customer.phone, order.id, 'N/A');
+      } else if (status === 'Delivered') {
+        whatsappService.sendOrderDelivered(order.customer.phone, order.id);
+      }
+    }
+
     res.json({ success: true, data: order });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

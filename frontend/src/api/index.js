@@ -25,6 +25,7 @@ export const adminAPI = {
   verify: () => api.get('/admin/verify'),
   getOrders: () => api.get('/admin/orders'),
   createOrder: (data) => api.post('/admin/orders', data),
+  createPaymentSession: (data) => api.post('/admin/orders/create-payment-session', data),
   updateOrderStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }),
   trackOrder: (orderId) => api.get(`/admin/track/${orderId}`),
   getBanners: () => api.get('/admin/banners'),
