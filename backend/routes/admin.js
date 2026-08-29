@@ -129,7 +129,11 @@ router.get('/orders', verifyAdmin, async (req, res) => {
       for (const order of rows) {
         const [items] = await db.pool().query('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
         ordersWithItems.push({
-          ...order,
+          id: order.id,
+          orderStatus: order.order_status || 'Pending',
+          paymentStatus: order.payment_status || 'Pending',
+          paymentMethod: order.payment_method || 'Online',
+          createdAt: order.created_at,
           customer: {
             name: order.customer_name,
             email: order.customer_email,
