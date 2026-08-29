@@ -117,7 +117,7 @@ const filterTabs = ['All', 'Necklaces', 'Earrings', 'Rings', 'Bangles'];
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [heroSlides, setHeroSlides] = useState(defaultHeroSlides);
+  const [heroSlides, setHeroSlides] = useState([]);
   const [bestsellers, setBestsellers] = useState(fallbackBestsellers);
   const [newArrivals, setNewArrivals] = useState([]);
   const [categoryCards, setCategoryCards] = useState(defaultCategoryCards);
@@ -207,18 +207,17 @@ const Home = () => {
   return (
     <div className="sayuka-homepage-wrapper">
       {/* HERO BANNER SECTION */}
-      <section className="hero-banner-single">
-        <div className="hero-slides-wrapper">
-          {heroSlides.map((slide, idx) => (
-            <div key={slide.id} className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}>
-              <img src={slide.image} alt={slide.title} className="hero-banner-img" />
-
-            </div>
-          ))}
-        </div>
-
-
-      </section>
+      {heroSlides.length > 0 && (
+        <section className="hero-banner-single">
+          <div className="hero-slides-wrapper">
+            {heroSlides.map((slide, idx) => (
+              <div key={slide.id} className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}>
+                <img src={slide.image} alt={slide.title} className="hero-banner-img" />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* SECTION 1: Shop by Category */}
       <section className="luxury-category-section">
