@@ -4,6 +4,8 @@ Cashfree.XClientId = process.env.CASHFREE_APP_ID;
 Cashfree.XClientSecret = process.env.CASHFREE_SECRET_KEY;
 Cashfree.XEnvironment = process.env.CASHFREE_ENVIRONMENT === 'production' ? CFEnvironment.PRODUCTION : CFEnvironment.SANDBOX;
 
+const cashfree = new Cashfree();
+
 class CashfreeService {
   async createPaymentSession(orderId, amount, customer) {
     try {
@@ -23,7 +25,7 @@ class CashfreeService {
         }
       };
 
-      const response = await Cashfree.PGCreateOrder("2023-08-01", request);
+      const response = await cashfree.PGCreateOrder(request);
       return response.data;
     } catch (error) {
       console.error('Error creating Cashfree payment session:', error.response?.data || error.message);
