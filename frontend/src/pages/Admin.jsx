@@ -930,7 +930,16 @@ const Admin = () => {
                 <tbody>
                   {selectedOrder.items.map((item, idx) => (
                     <tr key={idx}>
-                      <td>{item.name}</td>
+                      <td style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        {item.image ? (
+                          <img src={item.image} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
+                        ) : (
+                          <div style={{ width: '40px', height: '40px', backgroundColor: '#f3f4f6', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                          </div>
+                        )}
+                        <span>{item.name}</span>
+                      </td>
                       <td>₹{item.price.toFixed(2)}</td>
                       <td>{item.qty}</td>
                       <td>₹{(item.price * item.qty).toFixed(2)}</td>

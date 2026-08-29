@@ -166,8 +166,15 @@ const TrackOrder = () => {
                 <div className="track-items-title">Order Items ({result.itemCount})</div>
                 <div className="track-items-list">
                   {result.items.map((item, i) => (
-                    <div key={i} className="track-item-row">
-                      <span className="track-item-name">{item.name}</span>
+                    <div key={i} className="track-item-row" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem 0' }}>
+                      {item.image ? (
+                        <img src={item.image} alt={item.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
+                      ) : (
+                        <div style={{ width: '48px', height: '48px', backgroundColor: '#f3f4f6', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        </div>
+                      )}
+                      <span className="track-item-name" style={{ flex: 1 }}>{item.name}</span>
                       <span className="track-item-qty">× {item.qty}</span>
                     </div>
                   ))}

@@ -127,7 +127,12 @@ router.get('/orders', verifyAdmin, async (req, res) => {
       
       const ordersWithItems = [];
       for (const order of rows) {
-        const [items] = await db.pool().query('SELECT * FROM order_items WHERE order_id = ?', [order.id]);
+        const [items] = await db.pool().query(`
+          SELECT oi.*, p.images 
+          FROM order_items oi 
+          LEFT JOIN products p ON oi.product_id = p.id 
+          WHERE oi.order_id = ?
+        `, [order.id]);
         ordersWithItems.push({
           id: order.id,
           orderStatus: order.order_status || 'Pending',
@@ -142,11 +147,23 @@ router.get('/orders', verifyAdmin, async (req, res) => {
           address: order.shipping_address,
           totalAmount: parseFloat(order.total_amount),
           whatsappConsent: !!order.whatsapp_consent,
-          items: items.map(i => ({
-            ...i,
-            name: i.product_name,
-            price: parseFloat(i.price)
-          }))
+          items: items.map(i => {
+            let img = '';
+            if (i.images) {
+              try { 
+                const parsed = JSON.parse(i.images);
+                img = Array.isArray(parsed) ? parsed[0] : parsed;
+              } catch(e) { 
+                img = i.images; 
+              }
+            }
+            return {
+              ...i,
+              name: i.product_name,
+              price: parseFloat(i.price),
+              image: img
+            };
+          })
         });
       }
       return res.json({ success: true, count: ordersWithItems.length, data: ordersWithItems });
@@ -307,10 +324,12 @@ router.get('/track/:orderId', async (req, res) => {
         return res.status(404).json({ success: false, message: 'Order not found. Please check the tracking code.' });
       }
       const order = rows[0];
-      const [items] = await db.pool().query(
-        'SELECT product_name, qty FROM order_items WHERE order_id = ?',
-        [orderId]
-      );
+      const [items] = await db.pool().query(`
+        SELECT oi.product_name, oi.qty, p.images 
+        FROM order_items oi
+        LEFT JOIN products p ON oi.product_id = p.id 
+        WHERE oi.order_id = ?
+      `, [orderId]);
       // Mask customer name for privacy (show first name only)
       const nameParts = (order.customer_name || '').split(' ');
       const maskedName = nameParts[0] + (nameParts.length > 1 ? ' ' + nameParts[nameParts.length - 1][0] + '.' : '');
@@ -324,7 +343,16 @@ router.get('/track/:orderId', async (req, res) => {
           orderStatus: order.order_status,
           createdAt: order.created_at,
           itemCount: items.length,
-          items: items.map(i => ({ name: i.product_name, qty: i.qty }))
+          items: items.map(i => {
+            let img = '';
+            if (i.images) {
+              try { 
+                const parsed = JSON.parse(i.images);
+                img = Array.isArray(parsed) ? parsed[0] : parsed;
+              } catch(e) { img = i.images; }
+            }
+            return { name: i.product_name, qty: i.qty, image: img };
+          })
         }
       });
     }
