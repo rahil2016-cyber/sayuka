@@ -1,10 +1,8 @@
 const { Cashfree, CFEnvironment } = require('cashfree-pg');
 
-Cashfree.XClientId = process.env.CASHFREE_APP_ID;
-Cashfree.XClientSecret = process.env.CASHFREE_SECRET_KEY;
-Cashfree.XEnvironment = process.env.CASHFREE_ENVIRONMENT === 'production' ? CFEnvironment.PRODUCTION : CFEnvironment.SANDBOX;
+const env = process.env.CASHFREE_ENVIRONMENT === 'production' ? CFEnvironment.PRODUCTION : CFEnvironment.SANDBOX;
 
-const cashfree = new Cashfree();
+const cashfree = new Cashfree(env, process.env.CASHFREE_APP_ID, process.env.CASHFREE_SECRET_KEY);
 
 class CashfreeService {
   async createPaymentSession(orderId, amount, customer) {
