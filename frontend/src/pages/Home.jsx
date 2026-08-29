@@ -212,22 +212,7 @@ const Home = () => {
           {heroSlides.map((slide, idx) => (
             <div key={slide.id} className={`hero-slide ${idx === currentSlide ? 'active' : ''}`}>
               <img src={slide.image} alt={slide.title} className="hero-banner-img" />
-            <div className="hero-overlay" />
-              <div className="hero-content-container">
-                <div className="hero-content">
-                  <span className="hero-label">SAYUKA LUXURY JEWELLERY</span>
-                  <h1 className="hero-title">{slide.title}</h1>
-                  <p className="hero-desc">{slide.subtitle}</p>
-                  <div className="hero-actions">
-                    <Link to="/collections" className="btn btn-primary btn-lg">
-                      Explore Collections
-                    </Link>
-                    <Link to="/custom-jewellery" className="btn btn-secondary btn-lg">
-                      Custom Orders
-                    </Link>
-                  </div>
-                </div>
-              </div>
+
             </div>
           ))}
         </div>
