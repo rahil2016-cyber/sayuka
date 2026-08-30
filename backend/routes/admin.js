@@ -304,7 +304,12 @@ router.post('/orders/create-payment-session', async (req, res) => {
     
     const sessionData = await cashfreeService.createPaymentSession(orderId, totalAmount, customer);
     
-    res.json({ success: true, payment_session_id: sessionData.payment_session_id, order_id: orderId });
+    res.json({ 
+      success: true, 
+      payment_session_id: sessionData.payment_session_id, 
+      order_id: orderId,
+      environment: process.env.CASHFREE_ENVIRONMENT === 'production' ? 'production' : 'sandbox'
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

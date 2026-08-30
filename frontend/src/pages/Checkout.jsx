@@ -62,7 +62,7 @@ const Checkout = () => {
       }
       
       const cashfree = window.Cashfree({
-        mode: "sandbox", // Change to production when live
+        mode: sessionRes.data.environment === 'production' ? "production" : "sandbox", 
       });
 
       // 3. Open Checkout
