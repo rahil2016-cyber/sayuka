@@ -117,7 +117,7 @@ const filterTabs = ['All', 'Necklaces', 'Earrings', 'Rings', 'Bangles'];
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [heroSlides, setHeroSlides] = useState([]);
+  const [heroSlides, setHeroSlides] = useState(defaultHeroSlides);
   const [bestsellers, setBestsellers] = useState(fallbackBestsellers);
   const [newArrivals, setNewArrivals] = useState([]);
   const [categoryCards, setCategoryCards] = useState(defaultCategoryCards);
